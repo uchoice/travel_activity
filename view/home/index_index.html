@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>礼游送好礼</title>
+    <link rel="stylesheet" href="/static/css/celebrity.min.css">
+    <link rel="stylesheet" href="/static/css/dropload.css">
+</head>
+
+<body>
+    <div id="wrap_content">
+        <div class="intro-wrap">
+        </div>
+        <div class="latest-wrap">
+            <div class="inner">
+                <ul class="headlist">
+                    {% for vote in votes %}
+                    <li>
+                        <a href="/home/index/vote" class="js-vote">
+                            <div class="head-wrap">
+                                <div class="head" style="background-image:url(/static/img/644.jpg)"></div>
+                            </div>
+                            <p class="title">{{vote.name}}</p>
+                            <p class="count">
+                                <em>{{vote.vote}}</em> 票</p>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="hottest-wrap" id="dataList">
+            <div class="inner">
+                <div class="main-title">作品展示</div>
+                {% if data.totalPage > 0%}
+                <ul id="hottest_headlist" class="headlist">
+                    {% if data.data.length > 0 %}
+                    {% set firstItem = data.data[0] %}
+                    <li class="first">
+                        <a href="/home/index/detail?id={{firstItem.id}}" class="js-vote">
+                            <div class="clearfix">
+                                <div class="head-wrap">
+                                    <div class="head" style="background-image:url({{firstItem.content[0].pics[0]}})"></div>
+                                </div>
+                                <div class="interactive">
+                                    <p class="title" style="font-size:20px;padding:25px 0 25px;width: 110px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{firstItem.title}}</p>
+                                    <p class="count">
+                                        <em>{{firstItem.votes}}</em> 票</p>
+                                </div>
+                            </div>
+                            <div class="s decorative"></div>
+                        </a>
+                    </li>
+                    {% if data.data.length > 1 %}
+                    {% set othItems = data.data.slice(1) %}
+                    {% for item in othItems %}
+                    <li class="normal">
+                        <a href="/home/index/detail?id={{item.id}}" class="js-vote">
+                            <div class="clearfix">
+                                <div class="head-wrap">
+                                    <div class="head" style="background-image:url({{item.content[0].pics[0]}})"></div>
+                                </div>
+                                <div class="interactive">
+                                    <p class="title">{{item.title}}</p>
+                                    <p class="count">
+                                        <em>{{item.votes}}</em> 票</p>
+                                </div>
+                            </div>
+                            <div class="s decorative"></div>
+                        </a>
+                    </li>
+                    {% endfor %}
+                    {% endif %}
+                    {% endif %}
+                </ul>
+                {% else %}
+                    <div class="dropload-down"><div class="dropload-noData">暂时没有发布的作品</div></div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="qrcode-masker">
+            长按识别下方二维码后即可发布作品
+            <div class="qrcode-wraper">
+                <img id="qrcode-img" src="/static/img/qrcode.jpg">
+            </div>
+        </div>
+        <div class="bar bar-fixed">
+            <div class="inner">
+                <ul class="foot-nav">
+                    <!-- <li>
+                        <a href="/home/index/rule" class="js-join">活动规则</a>
+                    </li> -->
+                    <li>
+                        <a href="/home/index" class="highlight js-gift">排名</a>
+                    </li>
+                    <li>
+                        <a href="/home/index/prize">奖品·规则</a>
+                    </li>
+                    <li>
+                        <a id="joinActivityLink" href="javascript:void(0)">参与活动</a>
+                    </li>
+                    <li>
+                        <a href="/home/index/myproducts">我的作品</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.querySelector('#joinActivityLink').onclick = function() {
+            window.fetch('/home/index/isfollow', {
+                    method: 'post',
+                    credentials: 'include',
+                }).then(function(data){
+                    return data.json();
+                }).then(function(res){
+                    if(res) {
+                        window.location.href = "/home/index/uploadproduct";
+                    } else {
+                        document.querySelector('.qrcode-masker').setAttribute('class', 'qrcode-masker show');
+                    }
+                }).catch(function(res){
+                    alert('网络繁忙，请稍后重试');
+                });
+        }
+        document.querySelector('.qrcode-masker').onclick = function(e) {
+            if(document.querySelector('#qrcode-img') !== e.target){
+                document.querySelector('.qrcode-masker').setAttribute('class', 'qrcode-masker');
+            }
+        }
+    </script>
+    {%if data.totalPage > 1 %}
+    <script src="/static/js/zepto.js"></script>
+    <script src="/static/js/jweixin-1.js"></script>
+    <script src="/static/js/dropload.js"></script>
+    <script>
+        $(function () {
+            var pageNo = 2;
+            $('#dataList').dropload({
+                scrollArea: window,
+                autoLoad: false,
+                domDown: {
+                    domNoData : '<div class="dropload-noData">暂无更多数据</div>'
+                },
+                loadDownFn: function (me) {
+                    $.ajax({
+                        type: 'post',
+                        url: '/home/index/loadmore',
+                        dataType: 'json',
+                        data: {
+                            pageNo: pageNo,
+                        },
+                        success: function (data) {
+                            var content = '';
+                            if(data.data && data.data.length > 0) {
+                                for(var i = 0, length = data.data.length ; i < length ; i++) {
+                                    content += '<li class="normal"><a href="/home/index/detail?id='+data.data[i].id+'" class="js-vote">'
+                                        + '<div class="clearfix"><div class="head-wrap">'
+                                        + '<div class="head" style="background-image:url('+data.data[i].content[0].pics[0]+')"></div></div>'
+                                        + '<div class="interactive"><p class="title">'+data.data[i].title+'</p><p class="count"><em>'+data.data[i].votes+'</em> 票</p></div>'
+                                        + '</div><div class="s decorative"></div></a></li>';
+                                }
+                                $('#hottest_headlist').append(content);
+                            }
+                            if(data.pageNo < data.totalPage){
+                                pageNo = ++data.pageNo;
+                            } else {
+                                me.noData(true);
+                            }
+                            me.resetload();
+                        },
+                        error: function (xhr, type) {
+                            alert('加载出错，请稍后再试~');
+                            // 即使加载出错，也得重置
+                            me.resetload();
+                        }
+                    });
+                }
+            });
+            /* $('#joinActivityLink').on('click', function(){
+                window.fetch('/home/index/isfollow', {
+                    method: 'post',
+                    credentials: 'include',
+                }).then(function(data){
+                    return data.json();
+                }).then(function(res){
+                    if(res) {
+                        window.location.href = "/home/index/uploadproduct";
+                    } else {
+                        $('.qrcode-masker').addClass('show');
+                    }
+                }).catch(function(res){
+                    alert('网络繁忙，请稍后重试');
+                });
+            }); */
+        });
+    </script>
+    {% endif %}
+</body>
+
+</html>

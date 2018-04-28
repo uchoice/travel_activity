@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>最萌班级合照秀</title>
+    <link rel="stylesheet" href="/static/css/celebrity.min.css">
+    <style type="text/css">
+       .btn-wrap {padding:10px 0;}
+       .btn-wrap a {
+           /* background:url(/static/img/aixin1.png) no-repeat; */
+           background-size: 20px 20px;
+           background-position: 6px 8px;
+           border-radius:10px;
+           border:1px solid #f96f80;
+           color: #f96f80;
+           display: inline-block;
+           font-size:20px;
+           height: 36px;
+           line-height: 36px;
+           width:auto;
+           padding: 0 20px 0 26px;
+           font-weight: bold;
+       }
+       .btn-wrap a.voted {
+           background: #f96f80;
+           color: #fff;
+       }
+       .btn-wrap a.no-back {
+           background: #fff;
+       }
+    </style>
+    <script>
+        function nofind() {
+            var img=event.srcElement; 
+            img.src="/static/img/download-error.png"; 
+            img.onerror=null; 
+        }
+    </script>
+</head>
+<body>
+    <div id="wrap_popup">
+        {% if detailInfo %}
+       <div id="popup_detail">
+          <div id="detailed_popup" class="popup popup-detail" >
+              <div class="head" style="z-index: 0;">
+                  <h4>{{detailInfo.article.title}}</h4><a href="index.html" class="btn-close-wrap"><span class="s btn-close"></span></a>
+              </div>
+              <div class="body white">
+                  {% for imgText in detailInfo.article.content %}
+                    {% for pic in imgText.pics %}
+                        <img src="{{pic}}" class="img-ele" onerror="nofind();" alt="">
+                    {% endfor %}
+                    <div class="info-desc">{{imgText.desc}}</div>
+                  {% endfor %}
+                <div class="detail-wrap">
+                    <div class="count">{{detailInfo.article.votes}}</div>
+                    <div class="btn-wrap">
+                            {% if detailInfo.article.status == 1 %}
+                                <a href="javascript:void(0)" id="vote" data-id="{{detailInfo.article.id}}" class="{{'' if detailInfo.canVote else 'voted'}}">{{"投票" if detailInfo.canVote else "已投票"}}</a>
+                                <a href="javascript:void(0)" class="js-share no-back">拉票</a>
+                            {% else %}
+                                <div class="status-content">
+                                    {% if item.status == 0 %}
+                                        审核中
+                                    {% else %}
+                                       审核未通过
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                    </div>
+                </div>
+                <div class="vote">
+                    <a id="share-wrap" href="javascript:;" class="share-wrap dn">
+                        <div class="share-text s"></div>
+                    </a>
+                </div> 
+              </div>
+            </div>
+       </div>
+       {% else %}
+       <div class="error-content">获取详情失败</div>
+       {% endif %}
+    </div>
+    <div class="qrcode-masker">
+        长按识别下方二维码关注投票
+        <div class="qrcode-wraper">
+            <img id="qrcode-img" src="/static/img/qrcode.jpg">
+        </div>
+    </div>
+    <div class="bar bar-fixed">
+        <div class="inner">
+            <ul class="foot-nav">
+                    <li>
+                        <a href="/home/index" class="js-gift">排名</a>
+                    </li>
+                    <li>
+                        <a href="/home/index/prize">奖品·规则</a>
+                    </li>
+                    <li>
+                        <a id="joinActivityLink" href="javascript:void(0)">参与活动</a>
+                    </li>
+                    <li>
+                        <a href="/home/index/myproducts">我的作品</a>
+                    </li>
+            </ul>
+        </div>
+    </div>
+    {% if canModify %}
+    <div class="edit-info-btn" data-id="{{detailInfo.article.id}}">
+        修改
+    </div>
+    {% endif %}
+    <script src="/static/js/zepto.js"></script>
+    <script src="/static/js/jweixin-1.js"></script>
+    <script>
+        $('.js-share').on('click', function() {
+            $('.share-wrap').show();
+        });
+        $('.share-wrap').on('click', function() {
+            $(this).hide();
+        });
+        $('#vote').on('click',function() {
+            var $this = $(this);
+            if(!$this.hasClass('voted')){
+                $this.addClass('voted').text('投票中...');
+                $.ajax({
+                    url: '/home/index/vote',
+                    type: 'post',
+                    data: {
+                        id: $(this).data('id'),
+                    },
+                    success: function(res) {
+                        if(res.data){
+                            alert('投票成功！');
+                            window.location.reload();
+                        } else {
+                            if(res.errno == 1002){
+                                $('.qrcode-masker').addClass('show');
+                            } else {
+                                alert('投票失败');
+                                $this.removeClass('voted').text('投票');
+                            }
+                        }
+                    }
+                });
+            }
+        })
+        $('.edit-info-btn').on('click', function() {
+            window.location.href = '/home/index/uploadproduct?id='+ $(this).data('id');
+        });
+        $('#joinActivityLink').on('click', function(){
+            window.fetch('/home/index/isfollow', {
+                method: 'post',
+                credentials: 'include',
+            }).then(function(data){
+                return data.json();
+            }).then(function(res){
+                if(res) {
+                    window.location.href = "/home/index/uploadproduct";
+                } else {
+                    $('.qrcode-masker').addClass('show');
+                }
+            }).catch(function(res){
+                alert('网络繁忙，请稍后重试');
+            });
+        });
+   </script>
+    <!-- <script src="/static/js/celebrity.js"></script> -->
+</body>
+
+</html>

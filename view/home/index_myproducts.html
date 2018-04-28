@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>礼游送好礼</title>
+    <link rel="stylesheet" href="/static/css/celebrity.min.css">
+    <link rel="stylesheet" href="/static/css/dropload.css">
+</head>
+
+<body>
+    <div id="wrap_popup">
+        <div class="hottest-wrap" style="margin-top: 20px;" id="dataList">
+            <div class="inner">
+                {% if myList.totalPage > 0%}
+                <ul id="hottest_headlist" class="headlist">
+                    {% for item in myList.data %}
+                    <li class="normal">
+                        <a href="/home/index/detail?id={{item.id}}" class="js-vote">
+                            <div class="clearfix">
+                                <div class="head-wrap">
+                                        {% if item.status == 0 %}
+                                            {% set status = {txt:'审核中', color: 'blue'}%}
+                                        {% elif item.status == 1 %}
+                                            {% set status = {txt:'审核通过', color: 'green'}%}
+                                        {% else %}
+                                            {% set status = {txt:'审核未通过', color: 'red'}%}
+                                        {% endif %}
+                                    <div class="status {{status.color}}">
+                                        {{status.txt}}
+                                    </div>
+                                    <div class="head" style="background-image:url({{item.content[0].pics[0]}})"></div>
+                                </div>
+                                <div class="interactive">
+                                    <p class="title">{{item.title}}</p>
+                                    <p class="count">
+                                        <em>{{item.votes}}</em> 票</p>
+                                </div>
+                            </div>
+                            <div class="s decorative"></div>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                    <div class="dropload-down"><div class="dropload-noData">您还没有发布的作品</div></div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="bar bar-fixed">
+            <div class="inner">
+                <ul class="foot-nav">
+                    
+                    <li>
+                        <a href="/home/index">排名</a>
+                    </li>
+                    <li>
+                        <a href="/home/index/prize">奖品·规则</a>
+                    </li>
+                    <li>
+                        <a href="/home/index/uploadproduct">参与活动</a>
+                    </li>
+                    <li>
+                        <a href="/home/index/myproducts" class="highlight">我的作品</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    {%if myList.totalPage > 1 %}
+    <script src="/static/js/zepto.js"></script>
+    <script src="/static/js/jweixin-1.js"></script>
+    <script src="/static/js/dropload.js"></script>
+    <script>
+        $(function () {
+            var pageNo = 2;
+            $('#dataList').dropload({
+                scrollArea: window,
+                autoLoad: false,
+                domDown: {
+                    domNoData : '<div class="dropload-noData">暂无更多数据</div>'
+                },
+                loadDownFn: function (me) {
+                    $.ajax({
+                        type: 'post',
+                        url: '/home/index/loadmoremyproducts',
+                        dataType: 'json',
+                        data: {
+                            pageNo: pageNo,
+                        },
+                        success: function (data) {
+                            var content = '';
+                            if(data.data && data.data.length > 0) {
+                                for(var i = 0, length = data.data.length ; i < length ; i++) {
+                                    content += '<li class="normal"><a href="/home/index/detail?id='+data.data[i].id+'" class="js-vote">'
+                                        + '<div class="clearfix"><div class="head-wrap">'
+                                        + '<div class="head" style="background-image:url('+data.data[i].content[0].pics[0]+')"></div></div>'
+                                        + '<div class="interactive"><p class="title">'+data.data[i].title+'</p><p class="count"><em>'+data.data[i].votes+'</em> 票</p></div>'
+                                        + '</div><div class="s decorative"></div></a></li>';
+                                }
+                                $('#hottest_headlist').append(content);
+                            }
+                            if(data.pageNo < data.totalPage){
+                                pageNo = ++data.pageNo;
+                            } else {
+                                me.noData(true);
+                            }
+                            me.resetload();
+                        },
+                        error: function (xhr, type) {
+                            alert('加载出错，请稍后再试~');
+                            // 即使加载出错，也得重置
+                            me.resetload();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+    {% endif %}
+</body>
+
+</html>
