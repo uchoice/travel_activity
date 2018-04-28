@@ -1,6 +1,6 @@
 #
-get http://192.168.0.105:8080/vote/article/mylist?pageNo=1&key=1
-Authorization: 998394
+post http://127.0.0.1:8360/home/index/uploaduserlocation
+
 
 
 # 事件打点

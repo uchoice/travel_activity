@@ -9,5 +9,6 @@ export default {
     wx: {
       host: 'http://127.0.0.1'
     }
-  }
+  },
+  uploadPath: '/data/sites/statics/img',
 };

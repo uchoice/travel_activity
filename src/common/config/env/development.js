@@ -8,5 +8,6 @@ export default {
       wx: {
         host: 'http://gift.u-choice.net',
       }
-  }
+    },
+    uploadPath: '/data/sites/statics/img',
 };

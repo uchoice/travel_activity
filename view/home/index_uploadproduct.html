@@ -4,15 +4,13 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>礼游送好礼</title>>
-    <link rel="stylesheet" href="/static/css/celebrity.min.css">
+    <link rel="stylesheet" href="/static/css/celebrity.min.css"/>
 </head>
 <body>
-
     <div class="popup">
         <div class="head">
             <h4>参与活动</h4><a href="/home/index" class="btn-close-wrap js-close-popup"><span class="s btn-close"></span></a></div>
         <div class="body">
-            <!-- <div class="s step s-step-1" style="margin:20px auto 10px auto"></div> -->
             <div id="file_upload_1" class="file-wrap state-start">
                 <form action="#" id="submitForm" enctype="multipart/form-data">
                     <div class="require-fields">
@@ -99,6 +97,12 @@
                 <p>2、照片确认上传后就不能进行更换；</p>
                 <p>3、活动奖品将在活动结束后陆续发放，请获奖班级耐心等候；</p>
                 <p>4、活动最终解释权归幼信通所有。</p>
+            </div>
+        </div>
+        <div class="qrcode-masker {{ 'show' if notfollow else '' }}">
+            长按识别下方二维码关注投票
+            <div class="qrcode-wraper">
+                <img id="qrcode-img" src="/static/img/qrcode.jpg">
             </div>
         </div>
         <div class="step-btns">

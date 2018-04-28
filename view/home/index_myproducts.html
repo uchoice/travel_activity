@@ -49,6 +49,12 @@
                 {% endif %}
             </div>
         </div>
+        <div class="qrcode-masker">
+            长按识别下方二维码后即可发布作品
+            <div class="qrcode-wraper">
+                <img id="qrcode-img" src="/static/img/qrcode.jpg">
+            </div>
+        </div>
         <div class="bar bar-fixed">
             <div class="inner">
                 <ul class="foot-nav">
@@ -60,7 +66,7 @@
                         <a href="/home/index/prize">奖品·规则</a>
                     </li>
                     <li>
-                        <a href="/home/index/uploadproduct">参与活动</a>
+                        <a id="joinActivityLink" href="javascript:void(0)">参与活动</a>
                     </li>
                     <li>
                         <a href="/home/index/myproducts" class="highlight">我的作品</a>
@@ -69,6 +75,29 @@
             </div>
         </div>
     </div>
+    <script>
+        document.querySelector('#joinActivityLink').onclick = function() {
+            window.fetch('/home/index/isfollow', {
+                    method: 'post',
+                    credentials: 'include',
+                }).then(function(data){
+                    return data.json();
+                }).then(function(res){
+                    if(res) {
+                        window.location.href = "/home/index/uploadproduct";
+                    } else {
+                        document.querySelector('.qrcode-masker').setAttribute('class', 'qrcode-masker show');
+                    }
+                }).catch(function(res){
+                    alert('网络繁忙，请稍后重试');
+                });
+        }
+        document.querySelector('.qrcode-masker').onclick = function(e) {
+            if(document.querySelector('#qrcode-img') !== e.target){
+                document.querySelector('.qrcode-masker').setAttribute('class', 'qrcode-masker');
+            }
+        }
+    </script>
     {%if myList.totalPage > 1 %}
     <script src="/static/js/zepto.js"></script>
     <!-- <script src="/static/js/jweixin-1.js"></script> -->

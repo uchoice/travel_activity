@@ -113,11 +113,19 @@ export default class extends think.service.base {
   }
   getWxSignInfo(url) {
     const par = {
-      url: `${wx.host}/wechart/sign?url=${encodeURIComponent(url)}`,
+      url: `${wx.host}/wechart/sign?url=${url}`,
       method: 'get',
     }
     think.log(par, `url:${url}`);
     return this.send(par);
+  }
+  uploadUserLocation(userLocationInfo, openid) {
+      const  par  = {
+         url: `${wx.host}/user/location?openId=${openid}&longitude=${userLocationInfo.longitude}&latitude=${userLocationInfo.latitude}&accuracy=${userLocationInfo.accuracy || ''}&speed=${userLocationInfo.speed || ''}`,
+         method: 'post',
+      }
+      think.log(par, `openid:${openid}`);
+      return this.send(par);
   }
   send({ body = null, headers = null, url, method, action }) {
     return fetch(url, {
@@ -142,7 +150,7 @@ export default class extends think.service.base {
       return res;
     }).catch(e => {
       think.log(e, 'error');
-      throw new Error('网络繁忙，请稍后再试');
+      /* throw new Error('网络繁忙，请稍后再试'); */
     });
   }
 }

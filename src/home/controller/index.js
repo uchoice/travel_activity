@@ -7,16 +7,18 @@ import path from 'path';
 function base64ToImg(base64Url, openid) {
   var base64Data = base64Url.replace(/^data:image\/\w+;base64,/, "");
   var dataBuffer = new Buffer(base64Data, 'base64');
-  const uploadpath = '/static/img/upload';
-  var imageName = `${openid}-${(new Date()).getTime()}.png`;
-  think.log(imageName, `write img use path`)
+  const uploadpath = /* '/static/img/upload' */think.config('uploadPath');
+  var imageName = `${(new Date()).getTime()}.png`;
+  think.log(`${uploadpath}/openid/${imageName}`, `write img use path`)
   return new Promise((resolve, reject) => {
-    fs.writeFile(`${think.RESOURCE_PATH}/${uploadpath}/${imageName}`, dataBuffer, function(err) {
-        if(err){
-          reject(err);
-        }else{
-          resolve(`${uploadpath}/${imageName}`);
-        }
+    fs.mkdir(`/${uploadpath}/${openid}`, function(err){
+      fs.writeFile(`/${uploadpath}/${openid}/${imageName}`, dataBuffer, function(err) {
+          if(err){
+            reject(err);
+          }else{
+            resolve(`/statics/img/${openid}/${imageName}`);
+          }
+      });
     });
   });
 }
@@ -51,18 +53,23 @@ export default class extends Base {
   }
   async uploadproductAction() {
     const id = this.get('id');
-    if (id) {
-      try {
-        const openid = await this.session('openid');
-        const server = new (think.service('server'))();
-        const detailInfo = await server.getDetail(id, openid);
-        think.log(detailInfo, 'detailInfo');
-        this.assign('detailInfo', detailInfo);
-        this.assign('openid', openid);
-        this.assign('modify', 'true');
-      } catch (e) {
-        think.log(e);
+    const openid = await this.session('openid');
+    const server = new (think.service('server'))();
+    const isfollowed = await server.isUserFollowed(openid);
+    if(isfollowed) {
+      if (id) {
+        try {
+          const detailInfo = await server.getDetail(id, openid);
+          think.log(detailInfo, 'detailInfo');
+          this.assign('detailInfo', detailInfo);
+          this.assign('openid', openid);
+          this.assign('modify', 'true');
+        } catch (e) {
+          think.log(e);
+        }
       }
+    } else {
+      this.assign('notfollow', true);
     }
     return this.display();
   }
@@ -79,6 +86,7 @@ export default class extends Base {
     fs.renameSync(imgPath, writePath);
 
     return this.success('/static/img/upload/' + imgName); */
+    console.log('uploadPath:', think.config('uploadPath'));
     const openid = await this.session('openid');
     const imgbase64Url = this.post('imgUrl');
     /* console.log('imgbase64Url', imgbase64Url); */ 
@@ -173,7 +181,7 @@ export default class extends Base {
     const openid = await this.session('openid');
     const server = new (think.service('server'))();
     const res = await server.isUserFollowed(openid);
-    this.json(false);
+    this.json(res);
   }
   //获取微信签名信息
   async getsignatureAction(){
@@ -182,11 +190,19 @@ export default class extends Base {
     const res = await server.getWxSignInfo(url);
     this.json(res);
   }
-
+  async uploaduserlocationAction(){
+    console.log('uploaduserlocation');
+    const openid = await this.session('openid');
+    const userLocationInfo = JSON.parse(this.post('userlocation'));
+    const server = new (think.service('server'))();
+    server.uploadUserLocation(userLocationInfo, openid);
+    return this.success();
+  }
   async uploadeventAction(){
     const openid = await this.session('openid');
     const eventInfo = this.post('eventInfo');
     const server = new (think.service('server'))();
-    const res = await server.uploadEvent(eventInfo,openid);
+    server.uploadEvent(eventInfo,openid);
+    return this.success();
   }
  }
