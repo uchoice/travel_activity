@@ -28,7 +28,7 @@ export default class extends Base {
     openid && await this.session('openid', openid);
   }
   async indexAction() {
-    /* const openid = await this.session('openid');
+    const openid = await this.session('openid');
     const server = new (think.service('server'))();
     try {
       const data = await server.getList(0, openid);
@@ -40,7 +40,7 @@ export default class extends Base {
     const getOpenid = this.get('openid');
     if(getOpenid) {
       return this.redirect('/home/index');
-    } */
+    }
     return this.display();
   }
   prizeAction() {
@@ -170,9 +170,23 @@ export default class extends Base {
   }
   //是否关注过公众号
   async isfollowAction(){
-    /* const openid = await this.session('openid');
+    const openid = await this.session('openid');
     const server = new (think.service('server'))();
-    const res = await server.isUserFollowed(openid); */
+    const res = await server.isUserFollowed(openid);
     this.json(false);
   }
-}
+  //获取微信签名信息
+  async getsignatureAction(){
+    const url = this.get('url');
+    const server = new (think.service('server'))();
+    const res = await server.getWxSignInfo(url);
+    this.json(res);
+  }
+
+  async uploadeventAction(){
+    const openid = await this.session('openid');
+    const eventInfo = this.post('eventInfo');
+    const server = new (think.service('server'))();
+    const res = await server.uploadEvent(eventInfo,openid);
+  }
+ }

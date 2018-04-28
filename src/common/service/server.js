@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
 'use strict';
-const { host, port, path } = think.config('transpond');
+const { host, port, path, wx } = think.config('transpond');
 
 export default class extends think.service.base {
   /**
@@ -25,7 +25,7 @@ export default class extends think.service.base {
   }
   isUserFollowed(openid){
     const par = {
-      url: `${host}/user/checkExists?openId=${openid}`,
+      url: `${wx.host}/user/checkExists?openId=${openid}`,
       method: 'get',
       action: 'isUserFollowed'
     }
@@ -102,7 +102,22 @@ export default class extends think.service.base {
     return this.send(par);
   }
   uploadEvent(eventInfo, openid){
-    
+    think.log(JSON.stringify(eventInfo), 'upload eventInfo');
+    const par = {
+      url: `${wx.host}/user/log?openId=${openid}&event=${encodeURIComponent(eventInfo.type)}&info=${encodeURIComponent(JSON.stringify(event.info))}`,
+      method: 'get',
+      action: 'uploadEvent',
+    }
+    think.log(par, `openid:${openid}`);
+    return this.send(par);
+  }
+  getWxSignInfo(url) {
+    const par = {
+      url: `${wx.host}/wechart/sign?url=${encodeURIComponent(url)}`,
+      method: 'get',
+    }
+    think.log(par, `url:${url}`);
+    return this.send(par);
   }
   send({ body = null, headers = null, url, method, action }) {
     return fetch(url, {

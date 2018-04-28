@@ -132,9 +132,47 @@
             }
         }
     </script>
+    <script src="/static/js/jweixin-1.0.0.js"></script>
+    <script>
+        window.fetch('/home/index/getsignature?url='+ encodeURIComponent(window.location.href)).then(function(data){
+           return data.json();
+        }).then(function(res){
+            wx.config({
+                debug: true, 
+                appId: res.appId,
+                timestamp: res.timestamp,
+                nonceStr: res.noncestr,
+                signature: res.signature,
+                jsApiList: ['getLocation']
+            });
+            wx.ready(function(){
+                wx.getLocation({
+                    type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                    success: function (res) {
+                        var uploadEventInfo = {
+                            type: 'user loaction Info upload',
+                            info:{
+                                latitude: res.latitude, // 纬度，浮点数，范围为90 ~ -90
+                                longitude: res.longitude, // 经度，浮点数，范围为180 ~ -180。
+                                speed: res.speed, // 速度，以米/每秒计
+                                accuracy: res.accuracy // 位置精度
+                            }
+                        }
+                        var formdata = new FormData();
+                        formdata.append('eventInfo', uploadEventInfo);
+                        window.fetch('/home/index/uploadevent', {
+                            method: 'post',
+                            credentials: 'include',
+                            body: formdata,
+                        })
+                    }
+                });
+            });
+        })
+    </script>
     {%if data.totalPage > 1 %}
     <script src="/static/js/zepto.js"></script>
-    <script src="/static/js/jweixin-1.js"></script>
+    <!-- <script src="/static/js/jweixin-1.js"></script> -->
     <script src="/static/js/dropload.js"></script>
     <script>
         $(function () {

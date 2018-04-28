@@ -1,3 +1,7 @@
 #
 get http://192.168.0.105:8080/vote/article/mylist?pageNo=1&key=1
 Authorization: 998394
+
+
+# 事件打点
+get http://gift.u-choice.net/user/log?openId=34&event='图片上传'&info={}

@@ -18,10 +18,10 @@
                     <div class="require-fields">
                         <div class="title-container">
                             <div class="title">礼品特产</div>
-                            <input id="title" class="ipt" name="title" value="{{detailInfo.article.title}}"/>
+                            <input id="title" maxlength="30" class="ipt" name="title" value="{{detailInfo.article.title}}"/>
                         </div>
                         {% if modify %}
-                            <input id="title" class="ipt" style="display: none;" name="id" value="{{detailInfo.article.id}}"/>
+                            <input id="title" maxlength="30" class="ipt" style="display: none;" name="id" value="{{detailInfo.article.id}}"/>
                             {% for content in detailInfo.article.content %}
                             {% set contentIndex = loop.index0 %}
                                 <div class="images-text-block">
@@ -84,11 +84,11 @@
                     <div class="not-required-fields" style="display: none;">
                         <div class="other-info-container">
                             <div class="title">推荐人群</div>
-                            <input id="crowd" class="ipt" name="crowd" value="{{detailInfo.article.crowd}}"/>
+                            <input id="crowd" maxlength="30" class="ipt" name="crowd" value="{{detailInfo.article.crowd}}"/>
                         </div>
                         <div class="other-info-container">
                             <div class="title">推荐场景</div>
-                            <input id="scene" class="ipt" name="scene" value="{{detailInfo.article.scene}}" />
+                            <input id="scene" maxlength="30" class="ipt" name="scene" value="{{detailInfo.article.scene}}" />
                         </div>
                     </div>
                 </form>
@@ -112,7 +112,7 @@
 
     <script src="/static/js/zepto.js"></script>
     <script src="/static/js/jquery.serializejson.min.js"></script>
-    <script src="/static/js/jweixin-1.js"></script>
+   <!--  <script src="/static/js/jweixin-1.js"></script> -->
     <script src="/static/js/lrz/lrz.bundle.js"></script>
     <script >
         $(function(){
