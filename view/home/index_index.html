@@ -42,7 +42,7 @@
                         <a href="/home/index/detail?id={{firstItem.id}}" class="js-vote">
                             <div class="clearfix">
                                 <div class="head-wrap">
-                                    <div class="head" style="background-image:url({{firstItem.content[0].pic}})"></div>
+                                    <div class="head" style="background-image:url({{firstItem.firstImg}})"></div>
                                 </div>
                                 <div class="interactive">
                                     <p class="title" style="font-size:20px;padding:25px 0 25px;width: 110px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{firstItem.title}}</p>
@@ -61,7 +61,7 @@
                         <a href="/home/index/detail?id={{item.id}}" class="js-vote">
                             <div class="clearfix">
                                 <div class="head-wrap">
-                                    <div class="head" style="background-image:url({{item.content[0].pic}})"></div>
+                                    <div class="head" style="background-image:url({{item.firstImg}})"></div>
                                 </div>
                                 <div class="interactive">
                                     <p class="title">{{item.title}}</p>
@@ -195,7 +195,7 @@
                                         + '<div class="clearfix"><div class="head-wrap">'
                                         + '<div class="head" style="background-image:url('+data.data[i].firstImg+')"></div></div>'
                                         + '<div class="interactive"><p class="title">'+data.data[i].title+'</p><p class="count"><em>'+data.data[i].votes+'</em> 票</p></div>'
-                                        + '</div><div class="s decorative"></div></a></li>';
+                                        + '</div><div class="number">'+data.data[i].id+'</div><div class="s decorative"></div></a></li>';
                                 }
                                 $('#hottest_headlist').append(content);
                             }

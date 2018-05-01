@@ -57,8 +57,8 @@
                   {% for imgText in detailInfo.article.content %}
                     {% if imgText.pic != '' %}
                         <img src="{{imgText.pic}}" class="img-ele" onerror="nofind();" alt="">
-                        {% else %}
-                        <div class="info-desc">{{imgText.desc.replace('\n', '<br/>') | safe }}</div>
+                        {% else %}  
+                        <div class="info-desc">{{ imgText.desc | replace('\n', '</br>', 1000) | safe }}</div>
                     {% endif %}
                   {% endfor %}
                 <div class="detail-wrap">
