@@ -15,88 +15,125 @@
                 <form action="#" id="submitForm" enctype="multipart/form-data">
                     <div class="require-fields">
                         <div class="title-container">
-                            <div class="title">礼品特产</div>
-                            <input id="title" maxlength="30" class="ipt" name="title" value="{{detailInfo.article.title}}"/>
+                            <div class="title">好礼推荐<span class="required">*</span></div>
+                            <input id="title" maxlength="32" class="ipt" name="title" value="{{detailInfo.article.title}}"/>
                         </div>
                         {% if modify %}
-                            <input id="title" maxlength="30" class="ipt" style="display: none;" name="id" value="{{detailInfo.article.id}}"/>
+                            <input id="title" maxlength="32" class="ipt" style="display: none;" name="id" value="{{detailInfo.article.id}}"/>
                             {% for content in detailInfo.article.content %}
                             {% set contentIndex = loop.index0 %}
-                                <div class="images-text-block">
-                                    <div class="title">活动图文</div>
-                                    <div class="images">
-                                        {% for img in content.pics %}
-                                        <div class="switch-start" data-index="{{contentIndex}}">
-                                            <input class="img-input" name="content[{{contentIndex}}][pics[]]" type="text" value="{{img}}" accept="image/*" />
-                                            <img class="uploader-cover" alt="" src="{{img}}" />
-                                            <div class="delete-wraper">
-                                                <span class="delete-btn">×</span>
-                                            </div>
-                                        </div>
-                                        {% endfor %}
-                                        <div class="switch-start" data-index="{{contentIndex}}">
-                                                <input class="img-input" name="content[{{contentIndex}}][pics[]]" type="file" accept="image/*" />
-                                                <a class="main">点击添加图片</a>
-                                                <img class="uploader-cover" alt="" />
-                                                <div class="delete-wraper none">
-                                                    <span class="delete-btn">×</span>
-                                                </div>
-                                                <!-- <p class="info">支持单张4M以内图片上传</p> -->
-                                        </div>
-                                    </div>
-                                    <div class="img-desc-wrapper">
-                                        <textarea name="content[{{contentIndex}}][desc]" placeholder="东西这么好，说点什么吧..." class="img-desc" cols="30" rows="10">{{content.desc}}</textarea>
-                                    </div>
-                                    <div class="opts">
-                                        <button class="opt-btn add-item-btn">插入图文</button>
-                                        {% if loop.first == false %}
-                                        <button class="opt-btn delete-item-btn">删除</button>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        {% else %}
-                            <div class="images-text-block">
-                                <div class="title">活动图文</div>
-                                <div class="images">
-                                    <div class="switch-start" data-index="0">
-                                        <input class="img-input" name="content[0][pics[]]" type="file" accept="image/*" />
-                                        <a class="main">点击添加图片</a>
-                                        <img class="uploader-cover" alt="" />
-                                        <div class="uploading-icon not-visibility"></div>
-                                        <div class="delete-wraper none">
+                                {% if content.pic != '' %}
+                                <div class="image-text-block">
+                                        <img class="uploader-cover" src="{{content.pic}}"/>
+                                        <input name="content[{{contentIndex}}][desc]" style="display: none;" />
+                                        <input name="content[{{contentIndex}}][pic]" style="display: none;" type="text" value="{{content.pic}}" /> 
+                                        <div class="delete-wraper">
                                             <span class="delete-btn">×</span>
                                         </div>
-                                        <!-- <p class="info">支持单张4M以内图片上传</p> -->
-                                    </div>
                                 </div>
-                                <div class="img-desc-wrapper">
-                                    <textarea name="content[0][desc]" placeholder="东西这么好，说点什么吧..." class="img-desc" cols="30" rows="10"></textarea>
+                                {% else %}
+                                <div class="image-text-block">
+                                        <input name="content[{{contentIndex}}][pic]" style="display: none;" type="text"/>
+                                        <textarea class="desc" name="content[{{contentIndex}}][desc]" placeholder="东西这么好，说点什么吧..." cols="30" rows="10">{{content.desc}}</textarea>
+                                        <button class="delete-txt">删除</button>
                                 </div>
-                                <div class="opts">
-                                    <button class="opt-btn add-item-btn">插入图文</button>
-                                </div>
-                            </div>
+                                {% endif %}
+                            {% endfor %}
                         {% endif %}
+                    <div class="content-opts">
+                        <div class="opt insert-pic">
+                            <img src="/static/img/tp.jpg" alt=""/>
+                            <input type="file" class="img-input" accept="image/*" />
+                            插入图片
+                        </div>
+                        <div class="vertical-line"></div>
+                        <div class="opt insert-txt">
+                            <img src="/static/img/wd.jpg" alt=""/>
+                            插入描述
+                        </div>
+                    </div>
                     </div>
                     <div class="not-required-fields" style="display: none;">
+                        {% if modify %}
                         <div class="other-info-container">
                             <div class="title">推荐人群</div>
-                            <input id="crowd" maxlength="30" class="ipt" name="crowd" value="{{detailInfo.article.crowd}}"/>
+                            <div class="choice-tags crowd">
+                                <span class="tag {{ 'selected' if detailInfo.article.crowds.values.indexOf('婴幼儿')>=0 else '' }}">婴幼儿</span>
+                                <span class="tag {{ 'selected' if detailInfo.article.crowds.values.indexOf('青年')>=0 else '' }}">青年</span>
+                                <span class="tag {{ 'selected' if detailInfo.article.crowds.values.indexOf('中年')>=0 else '' }}">中年</span>
+                                <span class="tag {{ 'selected' if detailInfo.article.crowds.values.indexOf('老年')>=0 else '' }}">老年</span>
+                                <span class="tag {{ 'selected' if detailInfo.article.crowds.values.indexOf('商务人士')>=0 else '' }}">商务人士</span>
+                                <span class="tag {{ 'selected' if detailInfo.article.crowds.values.indexOf('大学生')>=0 else '' }}">大学生</span>
+                                <span class="tag {{ 'selected' if detailInfo.article.crowds.values.indexOf('父母')>=0 else '' }}">父母</span>
+                                <span class="tag {{ 'selected' if detailInfo.article.crowds.values.indexOf('领导')>=0 else '' }}">领导</span>
+                                {% if detailInfo.article.crowds.oth != '' %}
+                                    <span class="tag other selected">其他</span>
+                                {% else %}
+                                    <span class="tag other">其他</span>
+                                {% endif %}
+                            </div>
+                            <input type="text" maxlength="64" placeholder="其他场景" value="{{detailInfo.article.crowds.oth}}" class="other-ipt {{ 'none' if detailInfo.article.crowds.oth == '' else ''}}"/>
                         </div>
                         <div class="other-info-container">
                             <div class="title">推荐场景</div>
-                            <input id="scene" maxlength="30" class="ipt" name="scene" value="{{detailInfo.article.scene}}" />
+                            <div class="choice-tags scene">
+                                    <span class="tag {{ 'selected' if detailInfo.article.scenes.values.indexOf('伴手礼')>=0 else '' }}">伴手礼</span>
+                                    <span class="tag {{ 'selected' if detailInfo.article.scenes.values.indexOf('生日礼物')>=0 else '' }}">生日礼物</span>
+                                    <span class="tag {{ 'selected' if detailInfo.article.scenes.values.indexOf('节日礼物')>=0 else '' }}">节日礼物</span>
+                                    <span class="tag {{ 'selected' if detailInfo.article.scenes.values.indexOf('表白礼物')>=0 else '' }}">表白礼物</span>
+                                    <span class="tag {{ 'selected' if detailInfo.article.scenes.values.indexOf('回馈客户')>=0 else '' }}">回馈客户</span>
+                                    <span class="tag {{ 'selected' if detailInfo.article.scenes.values.indexOf('员工礼物')>=0 else '' }}">员工礼物</span>
+                                    <span class="tag {{ 'selected' if detailInfo.article.scenes.values.indexOf('自用')>=0 else '' }}">自用</span>
+                                    {% if detailInfo.article.scenes.oth != '' %}
+                                        <span class="tag other selected">其他</span>
+                                    {% else %}
+                                        <span class="tag other">其他</span>
+                                    {% endif %}
+                            </div>
+                            <input type="text" maxlength="64" placeholder="其他场景" value="{{detailInfo.article.scenes.oth}}" class="other-ipt {{ 'none' if detailInfo.article.scenes.oth == '' else ''}}"/>
+                        </div>
+                        {% else %}
+                            <div class="other-info-container">
+                                <div class="title">推荐人群</div>
+                                <div class="choice-tags crowd">
+                                    <span class="tag">婴幼儿</span>
+                                    <span class="tag">青年</span>
+                                    <span class="tag">中年</span>
+                                    <span class="tag">老年</span>
+                                    <span class="tag">商务人士</span>
+                                    <span class="tag">大学生</span>
+                                    <span class="tag">父母</span>
+                                    <span class="tag">领导</span>
+                                    <span class="tag other">其他</span>
+                                </div>
+                                <input type="text" maxlength="64" placeholder="其他人群" class="other-ipt none">
+                            </div>
+                            <div class="other-info-container">
+                                <div class="title">推荐场景</div>
+                                <div class="choice-tags scene">
+                                        <span class="tag">伴手礼</span>
+                                        <span class="tag">生日礼物</span>
+                                        <span class="tag">节日礼物</span>
+                                        <span class="tag">表白礼物</span>
+                                        <span class="tag">回馈客户</span>
+                                        <span class="tag">员工礼物</span>
+                                        <span class="tag">自用</span>
+                                        <span class="tag other">其他</span>
+                                </div>
+                                <input type="text" maxlength="64" placeholder="其他场景" class="other-ipt none">
+                            </div>
+                        {% endif %}
+                        <div class="rule">
+                            <h5>注意事项：</h5>
+                            <p>1、请不要发布违规图片和文字信息；</p>
+                            <p>2、您发布的作品需要等待管理员审核通过后才能展示给其他用户；</p>
+                            <p>3、在我的作品页可以查看自己作品的审核状态；</p>
+                            <p>4、若作品审核未通过，可修改作品内容重新提交审核；</p>
+                            <p>5、每次修改作品后均需重新审核；</p>
+                            <p>6、活动最终解释权归礼游记所有；</p>
                         </div>
                     </div>
                 </form>
-            </div>
-            <div class="rule">
-                <h5>注意事项：</h5>
-                <p>1、请老师们务必在安全的环境下进行拍摄；</p>
-                <p>2、照片确认上传后就不能进行更换；</p>
-                <p>3、活动奖品将在活动结束后陆续发放，请获奖班级耐心等候；</p>
-                <p>4、活动最终解释权归幼信通所有。</p>
             </div>
         </div>
         <div class="qrcode-masker {{ 'show' if notfollow else '' }}">
@@ -116,59 +153,50 @@
 
     <script src="/static/js/zepto.js"></script>
     <script src="/static/js/jquery.serializejson.min.js"></script>
-   <!--  <script src="/static/js/jweixin-1.js"></script> -->
     <script src="/static/js/lrz/lrz.bundle.js"></script>
     <script >
         $(function(){
             var formdata = new FormData();
             var imgTextCount = '{{detailInfo.article.content.length}}' || 0;
-            function getNewUploader(index){
-                return '<div class="switch-start" data-index="'+index+'">'
-                + '<input class="img-input" name="content['+index+'][pics[]]" type="file" accept="image/*"><a class="main">点击添加图片</a>'
-                + '<img class="uploader-cover" alt="" /><div class="uploading-icon not-visibility"></div><div class="delete-wraper none">'
-                + '<span class="delete-btn">×</span></div></div>';
-            }
-            function getNewImageTextBlock(imgTextNum){
-                return '<div class="images-text-block"><div class="title">活动图文</div>'
-                + '<div class="images"><div class="switch-start" data-index="'+imgTextNum+'">'
-                + '<input class="img-input" name="content['+imgTextNum+'][pics[]]" type="file" accept="image/*" />'
-                + '<a class="main">点击添加图片</a><img class="uploader-cover" alt="" />'
-                + '<div class="delete-wraper none"><span class="delete-btn">×</span></div></div></div>'
-                + '<div class="img-desc-wrapper">'
-                + '<textarea name="content['+imgTextNum+'][desc]" placeholder="东西这么好，说点什么吧..." class="img-desc" cols="30" rows="10"></textarea>'
-                + '</div><div class="opts"><button class="opt-btn add-item-btn">插入图文</button><button class="opt-btn delete-item-btn">删除</button></div>';
-            }
-            function changeUploadState($obj, imgPath){
-                //修改背景
-                $obj.find('.uploader-cover').attr('src', imgPath);
-                $obj.find('.delete-wraper').removeClass('none');
-                //将文件上传input替换成为文本input
-                var $input = $obj.find('input');
-                $input.attr('type', 'text');
-                $input.val(imgPath);
-                $obj.find('.main').hide();
-                var uploaderNum = $obj.parent().find('.switch-start').length;
-                if(uploaderNum < 9) {
-                    $(getNewUploader($obj.data('index'))).insertAfter($obj);
+            function getImageTextBlock(type) {
+                var imageTextBlockCount = ++$('.image-text-block').length;
+                console.log('imageTextBlockCount', imageTextBlockCount);
+                var imageTextBlock;
+                if(type == 'img'){
+                    imageTextBlock = '<div class="image-text-block loading"><img class="uploader-cover" src=""/><input name="content['+imageTextBlockCount+'][desc]" style="display: none;" /><input class="image-url" name="content['+imageTextBlockCount+'][pic]" style="display: none;" type="text" value="" /> <div class="delete-wraper none">' +
+                                      '<span class="delete-btn">×</span></div><div class="uploading-icon uploading"></div></div>';
+                } else {
+                    imageTextBlock = '<div class="image-text-block"><input name="content['+imageTextBlockCount+'][pic]" style="display: none;" type="text"/><textarea class="desc" name="content['+imageTextBlockCount+'][desc]" placeholder="东西这么好，说点什么吧..." cols="30" rows="10"></textarea><button class="delete-txt">删除</button></div>';
                 }
+                return imageTextBlock;
+            }
+            function getTagsVal(type){
+                var value= {};
+                var values = [];
+                $.each($(type).find('.selected'), function(index, item) {
+                    if(!$(item).hasClass('other')){
+                        values.push($(item).text());
+                    } else {
+                        value.oth = $(type).parents('.other-info-container').find('.other-ipt').val();
+                    }
+                });
+                value.values = values;
+                console.log(value);
+                return value;
             }
             function submit() {
                 var param = $('#submitForm').serializeJSON();
+                console.log(param);
                 if(param.title == '') {
                     alert('请填写礼品特产名称');
                     return;
                 }
-                var isContentImgEmpty = false;
-                for(prop in param.content){
-                    if(!param.content[prop].pics || param.content[prop].pics.length == 0) {
-                        isContentImgEmpty = true;
-                    }
-                }
-                if(isContentImgEmpty) {
-                    alert('图文中请至少选择一张图片');
+                if($('.image-text-block').length == 0) {
+                    alert('请至少添加一张图片或文字');
                     return;
                 }
-                
+                param.crowds = getTagsVal('.crowd');
+                param.scenes = getTagsVal('.scene');
                 window.fetch('/home/index/addorupdateproduct',{
                     method: 'post',
                     headers: {
@@ -181,8 +209,8 @@
                 })
             }
             function uploadImg(formdata, $container){
-                $container.find('.main').addClass('not-visibility');
-                $container.find('.uploading-icon').removeClass('not-visibility');
+                var $imageTextBlock = $(getImageTextBlock('img'));
+                $imageTextBlock.insertBefore($container);
                 window.fetch('/home/index/uploadimg',{
                     method: 'post',
                     body: formdata,
@@ -190,16 +218,18 @@
                 }).then(function(res){
                     return res.json();
                 }).then(function(res){
-                    $container.find('.main').removeClass('not-visibility');
-                    $container.find('.uploading-icon').addClass('not-visibility');
-                    changeUploadState($container, res.data);
+                    console.log(res);
+                    $imageTextBlock.find('.uploader-cover').attr('src', res.data);
+                    $imageTextBlock.find('.image-url').val(res.data);
+                    $imageTextBlock.find('.delete-wraper').removeClass('none');
+                    $imageTextBlock.find('.uploading-icon').removeClass('uploading');
+                    $imageTextBlock.removeClass('loading');
+                    $container.find('img-input').val('');
                 }).catch(function(e){
-                    $container.find('.main').removeClass('not-visibility');
-                    $container.find('.uploading-icon').addClass('not-visibility');
                     console.log(e);
                 });
             }
-            $('#file_upload_1').on('change', '.img-input', function(e){
+            $('.content-opts').on('change', '.img-input', function(e){
                 var self = $(this);
                 var file = self.get(0).files[0];
                 lrz(file,{ width: 1024, fileName: 'img'})
@@ -208,7 +238,7 @@
                     /* console.log(rst); */
                     var formdata = new FormData();
                     formdata.append('imgUrl', rst.base64);
-                    uploadImg(formdata, self.parents('.switch-start'));
+                    uploadImg(formdata, self.parents('.content-opts'));
                 })
                 .catch(function (err) {
                    /*  alert('图片上传失败'); */
@@ -216,6 +246,12 @@
                 .always(function () {
                     // 不管是成功失败，都会执行
                 });
+            });
+            $('.insert-txt').on('click', function(){
+                $(getImageTextBlock('txt')).insertBefore($(this).parents('.content-opts'));
+            });
+            $('#file_upload_1').on('click', '.delete-txt', function(){
+                $(this).parents('.image-text-block').remove();
             });
             $('#next').on('click', function(){
                 $('.require-fields').hide();
@@ -231,20 +267,26 @@
                 $('#next').show();
                 $('#submit').hide();
             });
+            $('.tag').on('click', function(){
+                if($(this).hasClass('selected')){
+                    $(this).removeClass('selected');
+                    if($(this).hasClass('other')){
+                        $(this).parents('.other-info-container').find('.other-ipt').addClass('none').val('');
+                    }
+                } else {
+                    $(this).addClass('selected');
+                    if($(this).hasClass('other')){
+                        $(this).parents('.other-info-container').find('.other-ipt').removeClass('none');
+                    }
+                }
+                
+            });
             $('#submit').on('click', function(){
                 confirm('确定提交吗？') && submit();
             });
-            $('#file_upload_1').on('click', '.delete-item-btn', function(e){
-                e.preventDefault();
-                $(this).parents('.images-text-block').remove();
-            });
-            $('#file_upload_1').on('click', '.add-item-btn', function(e){
-                e.preventDefault();
-                $(getNewImageTextBlock(++imgTextCount)).insertAfter($(this).parents('.images-text-block'));
-            });
             $('#file_upload_1').on('click', '.delete-wraper', function(e){
                 e.preventDefault();
-                $(this).parents('.switch-start').remove();
+                $(this).parents('.image-text-block').remove();
             });
         });
     </script>

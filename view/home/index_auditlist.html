@@ -14,23 +14,13 @@
     <div id="wrap_popup">
         <div class="hottest-wrap" style="margin-top: 20px;" id="dataList">
             <div class="inner">
-                {% if myList.totalPage > 0%}
+                {% if auditList.totalPage > 0 %}
                 <ul id="hottest_headlist" class="headlist">
-                    {% for item in myList.data %}
+                    {% for item in auditList.data %}
                     <li class="normal">
-                        <a href="/home/index/detail?id={{item.id}}" class="js-vote">
+                        <a href="/home/index/auditinfo?id={{item.id}}" class="js-vote">
                             <div class="clearfix">
                                 <div class="head-wrap">
-                                        {% if item.status == 0 %}
-                                            {% set status = {txt:'审核中', color: 'blue'}%}
-                                        {% elif item.status == 1 %}
-                                            {% set status = {txt:'审核通过', color: 'green'}%}
-                                        {% else %}
-                                            {% set status = {txt:'审核未通过', color: 'red'}%}
-                                        {% endif %}
-                                    <div class="status {{status.color}}">
-                                        {{status.txt}}
-                                    </div>
                                     <div class="head" style="background-image:url({{item.content[0].pic}})"></div>
                                 </div>
                                 <div class="interactive">
@@ -45,62 +35,13 @@
                     {% endfor %}
                 </ul>
                 {% else %}
-                    <div class="dropload-down"><div class="dropload-noData">您还没有发布的作品</div></div>
+                    <div class="dropload-down"><div class="dropload-noData">还没有待审核的作品</div></div>
                 {% endif %}
             </div>
         </div>
-        <div class="qrcode-masker">
-            长按识别下方二维码后即可发布作品
-            <div class="qrcode-wraper">
-                <img id="qrcode-img" src="/static/img/qrcode.jpg">
-            </div>
-        </div>
-        <div class="bar bar-fixed">
-            <div class="inner">
-                <ul class="foot-nav">
-                    
-                    <li>
-                        <a href="/home/index">排名</a>
-                    </li>
-                    <li>
-                        <a href="/home/index/prize">奖品·规则</a>
-                    </li>
-                    <li>
-                        <a id="joinActivityLink" href="javascript:void(0)">参与活动</a>
-                    </li>
-                    <li>
-                        <a href="/home/index/myproducts" class="highlight">我的作品</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
     </div>
-    <script>
-        document.querySelector('#joinActivityLink').onclick = function() {
-            window.fetch('/home/index/isfollow', {
-                    method: 'post',
-                    credentials: 'include',
-                }).then(function(data){
-                    return data.json();
-                }).then(function(res){
-                    if(res) {
-                        window.location.href = "/home/index/uploadproduct";
-                    } else {
-                        document.querySelector('.qrcode-masker').setAttribute('class', 'qrcode-masker show');
-                    }
-                }).catch(function(res){
-                    alert('网络繁忙，请稍后重试');
-                });
-        }
-        document.querySelector('.qrcode-masker').onclick = function(e) {
-            if(document.querySelector('#qrcode-img') !== e.target){
-                document.querySelector('.qrcode-masker').setAttribute('class', 'qrcode-masker');
-            }
-        }
-    </script>
-    {%if myList.totalPage > 1 %}
+    {%if auditList.totalPage > 1 %}
     <script src="/static/js/zepto.js"></script>
-    <!-- <script src="/static/js/jweixin-1.js"></script> -->
     <script src="/static/js/dropload.js"></script>
     <script>
         $(function () {
@@ -114,7 +55,7 @@
                 loadDownFn: function (me) {
                     $.ajax({
                         type: 'post',
-                        url: '/home/index/loadmoremyproducts',
+                        url: '/home/index/loadmorealist',
                         dataType: 'json',
                         data: {
                             pageNo: pageNo,
@@ -123,9 +64,8 @@
                             var content = '';
                             if(data.data && data.data.length > 0) {
                                 for(var i = 0, length = data.data.length ; i < length ; i++) {
-                                    var statusInfo =  data.data[i].status == 0 ? {txt:'审核中', color: 'blue'} : data.data[i].status == 1 ? {txt:'审核通过', color: 'green'} : {txt:'审核未通过', color: 'red'}; 
                                     content += '<li class="normal"><a href="/home/index/detail?id='+data.data[i].id+'" class="js-vote">'
-                                        + '<div class="clearfix"><div class="head-wrap"><div class="status '+statusInfo.color+'">'+statusInfo.txt+'</div>'
+                                        + '<div class="clearfix"><div class="head-wrap">'
                                         + '<div class="head" style="background-image:url('+data.data[i].content[0].pics[0]+')"></div></div>'
                                         + '<div class="interactive"><p class="title">'+data.data[i].title+'</p><p class="count"><em>'+data.data[i].votes+'</em> 票</p></div>'
                                         + '</div><div class="s decorative"></div></a></li>';

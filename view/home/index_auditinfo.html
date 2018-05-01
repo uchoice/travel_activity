@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>礼游送好礼</title>
+    <link rel="stylesheet" href="/static/css/celebrity.min.css">
+    <style type="text/css">
+       .btn-wrap {padding:10px 0;}
+       .btn-wrap a {
+           /* background:url(/static/img/aixin1.png) no-repeat; */
+           background-size: 20px 20px;
+           background-position: 6px 8px;
+           border-radius:10px;
+           border:1px solid #f96f80;
+           color: #f96f80;
+           display: inline-block;
+           font-size:20px;
+           height: 36px;
+           line-height: 36px;
+           width:auto;
+           padding: 0 20px 0 26px;
+           font-weight: bold;
+       }
+       .btn-wrap a.voted {
+           background: #f96f80;
+           color: #fff;
+       }
+       .btn-wrap a.no-back {
+           background: #fff;
+       }
+    </style>
+    <script>
+        function nofind() {
+            var img=event.srcElement; 
+            img.src="/static/img/download-error.png"; 
+            img.onerror=null; 
+        }
+    </script>
+</head>
+<body>
+    <div id="wrap_popup">
+        {% if auditInfo %}
+       <div id="popup_detail">
+          <div id="detailed_popup" class="popup popup-detail" >
+              <div class="head" style="z-index: 0;">
+                  <h4>{{auditInfo.article.title}}</h4><a href="/home/index/auditlist?openid={{openid}}" class="btn-close-wrap"><span class="s btn-close"></span></a>
+              </div>
+              <div class="body white">
+                    <div class="article-info">
+                      <div class="line"><span class="title">作品编号：</span><span class="content">{{auditInfo.article.id}}</span></div>
+                      <div class="line"><span class="title">推荐人群：</span><span class="content">{{auditInfo.article.crowds.values.join(' ') + ' ' + auditInfo.article.crowds.oth}}</span></div>
+                      <div class="line"><span class="title">推荐场景：</span><span class="content">{{auditInfo.article.scenes.values.join(' ') + ' ' + auditInfo.article.scenes.oth}}</span></div>
+                    </div>
+                   <!--  <div class="split-line-container"><span class="split-line"></span>作品展示<span class="split-line" ></span></div> -->
+                  {% for imgText in auditInfo.article.content %}
+                    {% if imgText.pic != '' %}
+                        <img src="{{imgText.pic}}" class="img-ele" onerror="nofind();" alt="">
+                        {% else %}
+                        <div class="info-desc">{{imgText.desc}}</div>
+                    {% endif %}
+                  {% endfor %}
+                <div class="detail-wrap">
+                    <div class="count">{{auditInfo.article.votes}}</div>
+                    <div class="btn-wrap">
+                        {% if auditInfo.article.status == 0 %}
+                            <a href="javascript:void(0)" class="audit" data-status="1" data-id="{{auditInfo.article.id}}">通过</a>
+                            <a href="javascript:void(0)" class="audit" data-status="2" data-id="{{auditInfo.article.id}}">不通过</a>
+                        {% else %}
+                            {{'已通过' if auditInfo.article.status else '未通过' }}
+                        {% endif %}
+                    </div>
+                </div>
+              </div>
+            </div>
+       </div>
+       {% else %}
+       <div class="error-content">获取审核信息失败</div>
+       {% endif %}
+    </div>
+    <script src="/static/js/zepto.js"></script>
+    <script>
+        $('.audit').on('click',function() {
+            var $this = $(this);
+            $.ajax({
+                url: '/home/index/audit',
+                type: 'post',
+                data: {
+                    id: $(this).data('id'),
+                    status: $(this).data('status')
+                },
+                success: function(res) {
+                    if(res){
+                        alert('操作成功！');
+                        window.location.reload();
+                    } else {
+                        alert('操作失败');
+                    }
+                }
+            });
+        });
+   </script>
+</body>
+</html>

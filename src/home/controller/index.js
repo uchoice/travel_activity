@@ -9,7 +9,7 @@ function base64ToImg(base64Url, openid) {
   var dataBuffer = new Buffer(base64Data, 'base64');
   const uploadpath = /* '/static/img/upload' */think.config('uploadPath');
   var imageName = `${(new Date()).getTime()}.png`;
-  think.log(`${uploadpath}/openid/${imageName}`, `write img use path`)
+  /* think.log(`${uploadpath}/${openid}/${imageName}`, `write img use path`) */
   return new Promise((resolve, reject) => {
     fs.mkdir(`/${uploadpath}/${openid}`, function(err){
       fs.writeFile(`/${uploadpath}/${openid}/${imageName}`, dataBuffer, function(err) {
@@ -75,21 +75,9 @@ export default class extends Base {
   }
   //上传图片
   async uploadimgAction() {
-   /*  const files = this.file();
-    const imgPath = files.file.path;//为防止上传的时候因文件名重复而覆盖同名已上传文件，path是MD5方式产生的随机名称
-    const imgName = imgPath.split(path.sep).pop();
-    const uploadpath = think.RESOURCE_PATH + '/static/img/upload';
-    think.mkdir(uploadpath);//创建该目录
-
-    const writePath = uploadpath + '/' + imgName;//因为本系统不允许上传同名主题，所以文件名就直接使用主题名
-    //将上传的文件（路径为filepath的文件）移动到第二个参数所在的路径，并改为第二个参数的文件名。
-    fs.renameSync(imgPath, writePath);
-
-    return this.success('/static/img/upload/' + imgName); */
     console.log('uploadPath:', think.config('uploadPath'));
     const openid = await this.session('openid');
     const imgbase64Url = this.post('imgUrl');
-    /* console.log('imgbase64Url', imgbase64Url); */ 
     base64ToImg(imgbase64Url, openid).then((imgUrl) => {
       return this.success(imgUrl);
     }).catch((e) => {
@@ -204,5 +192,36 @@ export default class extends Base {
     const server = new (think.service('server'))();
     server.uploadEvent(eventInfo,openid);
     return this.success();
+  }
+  async auditlistAction() {
+    const openid = this.get('openid');
+    await this.session('openid', openid);
+    const server = new (think.service('server'))();
+    const auditList  = server.getAuditList(1,openid);
+    this.assign('auditList', auditList);
+    this.display();
+  }
+  async loadmorealistAction() {
+    const pageNo = this.post('pageNo');
+    const openid = await this.session('openid');
+    const server = new (think.service('server'))();
+    const data  = await server.getAuditList(pageNo, openid);
+    this.json(data);
+  }
+  async auditinfoAction() {
+     const id = this.get('id');
+     const openid = await this.session('openid');
+     const server = new (think.service('server'))();
+     const auditInfo = await server.getDetail(id, openid);
+     this.assign('openid', openid);
+     this.assign('auditInfo', auditInfo);
+     this.display();
+  }
+  async auditAction() {
+     const auditInfo = this.post();
+     const openid = await this.session('openid');
+     const server = new (think.service('server'))();
+     const res = await server.audit(auditInfo.id, openid, auditInfo.status);
+     this.json(res);
   }
  }

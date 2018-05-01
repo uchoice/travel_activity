@@ -34,7 +34,6 @@
         </div>
         <div class="hottest-wrap" id="dataList">
             <div class="inner">
-                <div class="main-title">作品展示</div>
                 {% if data.totalPage > 0%}
                 <ul id="hottest_headlist" class="headlist">
                     {% if data.data.length > 0 %}
@@ -43,7 +42,7 @@
                         <a href="/home/index/detail?id={{firstItem.id}}" class="js-vote">
                             <div class="clearfix">
                                 <div class="head-wrap">
-                                    <div class="head" style="background-image:url({{firstItem.content[0].pics[0]}})"></div>
+                                    <div class="head" style="background-image:url({{firstItem.content[0].pic}})"></div>
                                 </div>
                                 <div class="interactive">
                                     <p class="title" style="font-size:20px;padding:25px 0 25px;width: 110px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{firstItem.title}}</p>
@@ -51,6 +50,7 @@
                                         <em>{{firstItem.votes}}</em> 票</p>
                                 </div>
                             </div>
+                            <div class="number">{{firstItem.id}}</div>
                             <div class="s decorative"></div>
                         </a>
                     </li>
@@ -61,7 +61,7 @@
                         <a href="/home/index/detail?id={{item.id}}" class="js-vote">
                             <div class="clearfix">
                                 <div class="head-wrap">
-                                    <div class="head" style="background-image:url({{item.content[0].pics[0]}})"></div>
+                                    <div class="head" style="background-image:url({{item.content[0].pic}})"></div>
                                 </div>
                                 <div class="interactive">
                                     <p class="title">{{item.title}}</p>
@@ -69,6 +69,7 @@
                                         <em>{{item.votes}}</em> 票</p>
                                 </div>
                             </div>
+                            <div class="number">{{item.id}}</div>
                             <div class="s decorative"></div>
                         </a>
                     </li>
@@ -146,7 +147,7 @@
             });
             wx.ready(function(){
                 wx.getLocation({
-                    type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                    type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
                     success: function (res) {
                         var uploadEventInfo = {
                             latitude: res.latitude, // 纬度，浮点数，范围为90 ~ -90
@@ -168,7 +169,6 @@
     </script>
     {%if data.totalPage > 1 %}
     <script src="/static/js/zepto.js"></script>
-    <!-- <script src="/static/js/jweixin-1.js"></script> -->
     <script src="/static/js/dropload.js"></script>
     <script>
         $(function () {

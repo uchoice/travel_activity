@@ -127,6 +127,33 @@ export default class extends think.service.base {
       think.log(par, `openid:${openid}`);
       return this.send(par);
   }
+  getAuditList(pageNo = 1 , openid) {
+    const par = {
+      url: `${host}:${port}${path}/auditlist?pageNo=${pageNo}`,
+      method: 'get',
+      action: 'getAuditList',
+      headers: {
+        Authorization: openid,
+      }
+    }
+    think.log(par, `openid:${openid}`);
+
+    return this.send(par);
+  }
+  audit(id, openid, status){
+    const auditPath = status == '1' ? '/audit/pass' : '/audit/unpass';
+    const par = {
+        url: `${host}:${port}${path}${auditPath}`,
+        method: 'post',
+        action: 'audit',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          Authorization: openid,
+        },
+        body: `id=${id}`,
+    }
+    return this.send(par);
+  }
   send({ body = null, headers = null, url, method, action }) {
     return fetch(url, {
       method: method,
