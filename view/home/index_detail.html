@@ -45,7 +45,7 @@
        <div id="popup_detail">
           <div id="detailed_popup" class="popup popup-detail" >
               <div class="head" style="z-index: 0;">
-                  <h4>{{detailInfo.article.title}}</h4><a href="index.html" class="btn-close-wrap"><span class="s btn-close"></span></a>
+                  <h4>{{detailInfo.article.title}}</h4><a href="/home/index?openid={{openid}}" class="btn-close-wrap"><span class="s btn-close"></span></a>
               </div>
               <div class="body white">
                   <div class="article-info">
@@ -58,7 +58,7 @@
                     {% if imgText.pic != '' %}
                         <img src="{{imgText.pic}}" class="img-ele" onerror="nofind();" alt="">
                         {% else %}
-                        <div class="info-desc">{{imgText.desc}}</div>
+                        <div class="info-desc">{{imgText.desc.replace('\n', '<br/>') | safe }}</div>
                     {% endif %}
                   {% endfor %}
                 <div class="detail-wrap">

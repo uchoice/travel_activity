@@ -34,6 +34,14 @@ export default class extends Base {
     const server = new (think.service('server'))();
     try {
       const data = await server.getList(0, openid);
+      for(let i = 0, length1 = data.data.length; i < length1 ; i ++) {
+        for(let j = 0, length2 = data.data[i].content.length; j < length2; j++){
+            if(data.data[i].content[j].pic != '') {
+              data.data[i].firstImg = data.data[i].content[j].pic;
+              break;
+            }
+        }
+      }
       think.log(data, 'data');
       this.assign('data', data);
     } catch (e) {
@@ -112,6 +120,14 @@ export default class extends Base {
     const openid = await this.session('openid');
     const server = new (think.service('server'))();
     const data = await server.getList(pageNo, openid);
+    for(let i = 0, length1 = data.data.length; i < length1 ; i ++) {
+      for(let j = 0, length2 = data.data[i].content.length; j < length2; j++){
+          if(data.data[i].content[j].pic != '') {
+            data.data[i].firstImg = data.data[i].content[j].pic;
+            break;
+          }
+      }
+    }
     return this.json(data);
   }
   //详情
@@ -123,6 +139,7 @@ export default class extends Base {
       const detailInfo = await server.getDetail(id, openid);
       think.log(detailInfo, 'detailInfo');
       this.assign('detailInfo', detailInfo);
+      this.assign('openid', openid);
       if (openid == detailInfo.article.author) {
         this.assign('canModify', true);
       }
@@ -153,7 +170,15 @@ export default class extends Base {
   async myproductsAction() {
     const openid = await this.session('openid');
     const server = new (think.service('server'))();
-    const res = await server.getMyProducts(1, openid);
+    let res = await server.getMyProducts(1, openid);
+    for(let i = 0, length1 = res.data.length; i < length1 ; i ++) {
+      for(let j = 0, length2 = res.data[i].content.length; j < length2; j++){
+          if(res.data[i].content[j].pic != '') {
+            res.data[i].firstImg = res.data[i].content[j].pic;
+            break;
+          }
+      }
+    }
     this.assign('myList', res);
     this.display();
   }
@@ -206,6 +231,14 @@ export default class extends Base {
     const openid = await this.session('openid');
     const server = new (think.service('server'))();
     const data  = await server.getAuditList(pageNo, openid);
+    for(let i = 0, length1 = data.data.length; i < length1 ; i ++) {
+      for(let j = 0, length2 = data.data[i].content.length; j < length2; j++){
+          if(data.data[i].content[j].pic != '') {
+            data.data[i].firstImg = data.data[i].content[j].pic;
+            break;
+          }
+      }
+    }
     this.json(data);
   }
   async auditinfoAction() {
