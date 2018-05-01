@@ -143,7 +143,7 @@ export default class extends Base {
       try{
         res = await server.vote(id, openid);
       } catch(e){
-        
+        this.fail(+e.message, '已投票');
       }
       this.success(res);
     } else {

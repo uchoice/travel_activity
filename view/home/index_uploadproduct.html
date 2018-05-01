@@ -35,7 +35,7 @@
                                 <div class="image-text-block">
                                         <input name="content[{{contentIndex}}][pic]" style="display: none;" type="text"/>
                                         <textarea class="desc" name="content[{{contentIndex}}][desc]" placeholder="东西这么好，说点什么吧..." cols="30" rows="10">{{content.desc}}</textarea>
-                                        <button class="delete-txt">删除</button>
+                                        <button class="delete-txt">删除描述</button>
                                 </div>
                                 {% endif %}
                             {% endfor %}
@@ -166,7 +166,7 @@
                     imageTextBlock = '<div class="image-text-block loading"><img class="uploader-cover" src=""/><input name="content['+imageTextBlockCount+'][desc]" style="display: none;" /><input class="image-url" name="content['+imageTextBlockCount+'][pic]" style="display: none;" type="text" value="" /> <div class="delete-wraper none">' +
                                       '<span class="delete-btn">×</span></div><div class="uploading-icon uploading"></div></div>';
                 } else {
-                    imageTextBlock = '<div class="image-text-block"><input name="content['+imageTextBlockCount+'][pic]" style="display: none;" type="text"/><textarea class="desc" name="content['+imageTextBlockCount+'][desc]" placeholder="东西这么好，说点什么吧..." cols="30" rows="10"></textarea><button class="delete-txt">删除</button></div>';
+                    imageTextBlock = '<div class="image-text-block"><input name="content['+imageTextBlockCount+'][pic]" style="display: none;" type="text"/><textarea class="desc" name="content['+imageTextBlockCount+'][desc]" placeholder="东西这么好，说点什么吧..." cols="30" rows="10"></textarea><button class="delete-txt">删除描述</button></div>';
                 }
                 return imageTextBlock;
             }

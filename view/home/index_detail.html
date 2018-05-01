@@ -4,7 +4,7 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
-    <title>礼游送好礼</title>
+    <title>礼游送好礼，大家快来帮我投票吧</title>
     <link rel="stylesheet" href="/static/css/celebrity.min.css">
     <style type="text/css">
        .btn-wrap {padding:10px 0;}
@@ -136,7 +136,7 @@
         $('#vote').on('click',function() {
             var $this = $(this);
             if(!$this.hasClass('voted')){
-                $this.addClass('voted').text('投票中...');
+                /* $this.addClass('voted').text('投票中...'); */
                 $.ajax({
                     url: '/home/index/vote',
                     type: 'post',
@@ -148,6 +148,8 @@
                             if(res.errno == 1002){
                                 $('.qrcode-info').show(500);
                                 $this.remove();
+                            } else if(res.errno == 403) {
+                                alert('已投票,谢谢');
                             } else {
                                 alert('投票失败');
                                 $this.removeClass('voted').text('投票');
@@ -155,13 +157,13 @@
                         }
                     }
                 });
-                $.ajax({
+                /* $.ajax({
                     url: '/home/index/vote',
                     type: 'post',
                     data: {
                         id: $(this).data('id'),
                     }
-                });
+                }); */
                 var count = $('.count').text();
                 $('.count').text(++count);
                 $(this).addClass('voted').text('已投票');

@@ -177,7 +177,11 @@ export default class extends think.service.base {
       return res;
     }).catch(e => {
       think.log(e, 'error');
-      /* throw new Error('网络繁忙，请稍后再试'); */
+      if(e.response.status == 403){
+        throw new Error(e.response.status);
+      } else {
+        throw new Error('网络繁忙，请稍后再试');
+      }
     });
   }
 }
