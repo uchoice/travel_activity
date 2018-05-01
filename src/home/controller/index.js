@@ -35,6 +35,7 @@ export default class extends Base {
     try {
       const data = await server.getList(0, openid);
       for(let i = 0, length1 = data.data.length; i < length1 ; i ++) {
+        data.data[i].firstImg = '/static/img/download-error.png';
         for(let j = 0, length2 = data.data[i].content.length; j < length2; j++){
             if(data.data[i].content[j].pic != '') {
               data.data[i].firstImg = data.data[i].content[j].pic;
@@ -121,6 +122,7 @@ export default class extends Base {
     const server = new (think.service('server'))();
     const data = await server.getList(pageNo, openid);
     for(let i = 0, length1 = data.data.length; i < length1 ; i ++) {
+      data.data[i].firstImg = '/static/img/download-error.png';
       for(let j = 0, length2 = data.data[i].content.length; j < length2; j++){
           if(data.data[i].content[j].pic != '') {
             data.data[i].firstImg = data.data[i].content[j].pic;
@@ -172,6 +174,7 @@ export default class extends Base {
     const server = new (think.service('server'))();
     let res = await server.getMyProducts(1, openid);
     for(let i = 0, length1 = res.data.length; i < length1 ; i ++) {
+      res.data[i].firstImg = '/static/img/download-error.png';
       for(let j = 0, length2 = res.data[i].content.length; j < length2; j++){
           if(res.data[i].content[j].pic != '') {
             res.data[i].firstImg = res.data[i].content[j].pic;
@@ -187,6 +190,15 @@ export default class extends Base {
     const openid = await this.session('openid');
     const server = new (think.service('server'))();
     const res = await server.getMyProducts(pageNo, openid);
+    for(let i = 0, length1 = res.data.length; i < length1 ; i ++) {
+      res.data[i].firstImg = '/static/img/download-error.png';
+      for(let j = 0, length2 = res.data[i].content.length; j < length2; j++){
+          if(res.data[i].content[j].pic != '') {
+            res.data[i].firstImg = res.data[i].content[j].pic;
+            break;
+          }
+      }
+    }
     this.json(res);
   }
   //是否关注过公众号
