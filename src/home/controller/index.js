@@ -84,7 +84,6 @@ export default class extends Base {
   }
   //上传图片
   async uploadimgAction() {
-    console.log('uploadPath:', think.config('uploadPath'));
     const openid = await this.session('openid');
     const imgbase64Url = this.post('imgUrl');
     base64ToImg(imgbase64Url, openid).then((imgUrl) => {
@@ -97,8 +96,8 @@ export default class extends Base {
   //添加作品
   async addorupdateproductAction() {
     let contentArr = [];
-    const data = this.post();
-    let { content, ...oth } = data;
+    const data = this.post('param');
+    let { content, ...oth } = JSON.parse(data);
     for (let prop in content) {
       contentArr.push(content[prop]);
     }
@@ -234,7 +233,16 @@ export default class extends Base {
     const openid = this.get('openid');
     await this.session('openid', openid);
     const server = new (think.service('server'))();
-    const auditList  = server.getAuditList(1,openid);
+    const auditList  = await server.getAuditList(1,openid);
+    for(let i = 0, length1 = auditList.data.length; i < length1 ; i ++) {
+      auditList.data[i].firstImg = '/static/img/download-error.png';
+      for(let j = 0, length2 = auditList.data[i].content.length; j < length2; j++){
+          if(auditList.data[i].content[j].pic != '') {
+            auditList.data[i].firstImg = auditList.data[i].content[j].pic;
+            break;
+          }
+      }
+    }
     this.assign('auditList', auditList);
     this.display();
   }
@@ -244,6 +252,7 @@ export default class extends Base {
     const server = new (think.service('server'))();
     const data  = await server.getAuditList(pageNo, openid);
     for(let i = 0, length1 = data.data.length; i < length1 ; i ++) {
+      data.data[i].firstImg = '/static/img/download-error.png';
       for(let j = 0, length2 = data.data[i].content.length; j < length2; j++){
           if(data.data[i].content[j].pic != '') {
             data.data[i].firstImg = data.data[i].content[j].pic;

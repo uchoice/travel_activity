@@ -53,7 +53,6 @@
                       <div class="line"><span class="title">推荐人群：</span><span class="content">{{detailInfo.article.crowds.values.join(' ') + ' ' + detailInfo.article.crowds.oth}}</span></div>
                       <div class="line"><span class="title">推荐场景：</span><span class="content">{{detailInfo.article.scenes.values.join(' ') + ' ' + detailInfo.article.scenes.oth}}</span></div>
                   </div>
-                  <!-- <div class="split-line-container"><span class="split-line"></span>作品展示<span class="split-line" ></span></div> -->
                   {% for imgText in detailInfo.article.content %}
                     {% if imgText.pic != '' %}
                         <img src="{{imgText.pic}}" class="img-ele" onerror="nofind();" alt="">
@@ -65,7 +64,6 @@
                     <div class="count">{{detailInfo.article.votes}}</div>
                     <div class="btn-wrap">
                             {% if detailInfo.article.status == 1 %}
-                                <!-- <a href="javascript:void(0)" id="vote" data-id="{{detailInfo.article.id}}" class="{{'' if detailInfo.canVote else 'voted'}}">{{"投票" if detailInfo.canVote else "已投票"}}</a> -->
                                 <a href="javascript:void(0)" id="vote" data-id="{{detailInfo.article.id}}" class="{{'' if detailInfo.canVote else 'voted'}}">{{"投票" if detailInfo.canVote else "已投票"}}</a>
                                 <a href="javascript:void(0)" class="js-share no-back">拉票</a>
                             {% else %}
@@ -157,13 +155,6 @@
                         }
                     }
                 });
-                /* $.ajax({
-                    url: '/home/index/vote',
-                    type: 'post',
-                    data: {
-                        id: $(this).data('id'),
-                    }
-                }); */
                 var count = $('.count').text();
                 $('.count').text(++count);
                 $(this).addClass('voted').text('已投票');
@@ -173,19 +164,16 @@
             window.location.href = '/home/index/uploadproduct?id='+ $(this).data('id');
         });
         $('#joinActivityLink').on('click', function(){
-            window.fetch('/home/index/isfollow', {
-                method: 'post',
-                credentials: 'include',
-            }).then(function(data){
-                return data.json();
-            }).then(function(res){
-                if(res) {
-                    window.location.href = "/home/index/uploadproduct";
-                } else {
-                    $('.qrcode-masker').addClass('show');
+            $.ajax({
+                url: '/home/index/isfollow',
+                type: 'post',
+                success: function(res) {
+                    if(res) {
+                        window.location.href = "/home/index/uploadproduct";
+                    } else {
+                        $('.qrcode-masker').addClass('show');
+                    }
                 }
-            }).catch(function(res){
-                alert('网络繁忙，请稍后重试');
             });
         });
         document.querySelector('.qrcode-masker').onclick = function(e) {

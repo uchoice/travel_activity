@@ -115,19 +115,17 @@
     </div>
     <script>
         document.querySelector('#joinActivityLink').onclick = function() {
-            window.fetch('/home/index/isfollow', {
-                    method: 'post',
-                    credentials: 'include',
-                }).then(function(data){
-                    return data.json();
-                }).then(function(res){
-                    if(res) {
-                        window.location.href = "/home/index/uploadproduct";
-                    } else {
-                        document.querySelector('.qrcode-masker').setAttribute('class', 'qrcode-masker show');
+                $.ajax({
+                    url: '/home/index/isfollow',
+                    type: 'post',
+                    success: function(res) {
+                        console.log(res);
+                        if(res) {
+                            window.location.href = "/home/index/uploadproduct";
+                        } else {
+                            document.querySelector('.qrcode-masker').setAttribute('class', 'qrcode-masker show');
+                        }
                     }
-                }).catch(function(res){
-                    alert('网络繁忙，请稍后重试');
                 });
         }
         document.querySelector('.qrcode-masker').onclick = function(e) {
@@ -137,41 +135,46 @@
         }
     </script>
     <script src="/static/js/jweixin-1.0.0.js"></script>
+    <script src="/static/js/zepto.js"></script>
     <script>
-        window.fetch('/home/index/getsignature?url='+ encodeURIComponent(window.location.href)).then(function(data){
-           return data.json();
-        }).then(function(res){
-            wx.config({
-                appId: res.appId,
-                timestamp: res.timestamp,
-                nonceStr: res.noncestr,
-                signature: res.signature,
-                jsApiList: ['getLocation']
-            });
-            wx.ready(function(){
-                wx.getLocation({
-                    type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-                    success: function (res) {
-                        var uploadEventInfo = {
-                            latitude: res.latitude, // 纬度，浮点数，范围为90 ~ -90
-                            longitude: res.longitude, // 经度，浮点数，范围为180 ~ -180。
-                            speed: res.speed, // 速度，以米/每秒计
-                            accuracy: res.accuracy, // 位置精度
-                        }
-                        var formdata = new FormData();
-                        formdata.append('userlocation', JSON.stringify(uploadEventInfo));
-                        window.fetch('/home/index/uploaduserlocation', {
-                            method: 'post',
-                            credentials: 'include',
-                            body: formdata,
-                        })
-                    }
+        $.ajax({
+            url: '/home/index/getsignature?url='+ encodeURIComponent(window.location.href),
+            type: 'get',
+            success: function(res) {
+                wx.config({
+                    debug: true,
+                    appId: res.appId,
+                    timestamp: res.timestamp,
+                    nonceStr: res.noncestr,
+                    signature: res.signature,
+                    jsApiList: ['getLocation']
                 });
-            });
-        })
+                wx.ready(function(){
+                    wx.getLocation({
+                        type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                        success: function (res) {
+                            var uploadEventInfo = {
+                                latitude: res.latitude, // 纬度，浮点数，范围为90 ~ -90
+                                longitude: res.longitude, // 经度，浮点数，范围为180 ~ -180。
+                                speed: res.speed, // 速度，以米/每秒计
+                                accuracy: res.accuracy, // 位置精度
+                            }
+                            var formdata = new FormData();
+                            formdata.append('userlocation', JSON.stringify(uploadEventInfo));
+                            $.ajax({
+                                url: '/home/index/uploaduserlocation',
+                                type: 'post',
+                                data: formdata,
+                                processData: false,
+                                contentType: false, // 注意这里应设为false
+                            })
+                        }
+                    });
+                });
+            }
+        });
     </script>
     {%if data.totalPage > 1 %}
-    <script src="/static/js/zepto.js"></script>
     <script src="/static/js/dropload.js"></script>
     <script>
         $(function () {
@@ -218,22 +221,6 @@
                     });
                 }
             });
-            /* $('#joinActivityLink').on('click', function(){
-                window.fetch('/home/index/isfollow', {
-                    method: 'post',
-                    credentials: 'include',
-                }).then(function(data){
-                    return data.json();
-                }).then(function(res){
-                    if(res) {
-                        window.location.href = "/home/index/uploadproduct";
-                    } else {
-                        $('.qrcode-masker').addClass('show');
-                    }
-                }).catch(function(res){
-                    alert('网络繁忙，请稍后重试');
-                });
-            }); */
         });
     </script>
     {% endif %}

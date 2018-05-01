@@ -170,35 +170,32 @@
                     return;
                 }
                 
-                window.fetch('/home/index/addorupdateproduct',{
-                    method: 'post',
-                    headers: {
-                        'content-type': 'application/json'
-                    },
-                    credentials: 'include',
-                    body: JSON.stringify(param),
-                }).then(function(res){
-                    window.location.href = "/home/index/myproducts";
+                $.ajax({
+                    url: '/home/index/addorupdateproduct',
+                    type: 'post',
+                    data: JSON.stringify(param),
+                    success: function(res){
+                        window.location.href = "/home/index/myproducts";
+                    }
                 })
             }
             function uploadImg(formdata, $container){
                 $container.find('.main').addClass('not-visibility');
                 $container.find('.uploading-icon').removeClass('not-visibility');
-                window.fetch('/home/index/uploadimg',{
-                    method: 'post',
-                    body: formdata,
-                    credentials: 'include',
-                }).then(function(res){
-                    return res.json();
-                }).then(function(res){
-                    $container.find('.main').removeClass('not-visibility');
-                    $container.find('.uploading-icon').addClass('not-visibility');
-                    changeUploadState($container, res.data);
-                }).catch(function(e){
-                    $container.find('.main').removeClass('not-visibility');
-                    $container.find('.uploading-icon').addClass('not-visibility');
-                    console.log(e);
-                });
+                $.ajax({
+                    url: '/home/index/uploadimg',
+                    type: 'post',
+                    data: formdata,
+                    success: function(res) {
+                        $container.find('.main').removeClass('not-visibility');
+                        $container.find('.uploading-icon').addClass('not-visibility');
+                        changeUploadState($container, res.data);
+                    },
+                    error: function(e) {
+                        $container.find('.main').removeClass('not-visibility');
+                        $container.find('.uploading-icon').addClass('not-visibility');
+                    }
+                })
             }
             $('#file_upload_1').on('change', '.img-input', function(e){
                 var self = $(this);

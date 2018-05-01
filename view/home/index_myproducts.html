@@ -75,22 +75,21 @@
             </div>
         </div>
     </div>
+    <script src="/static/js/zepto.js"></script>
     <script>
         document.querySelector('#joinActivityLink').onclick = function() {
-            window.fetch('/home/index/isfollow', {
-                    method: 'post',
-                    credentials: 'include',
-                }).then(function(data){
-                    return data.json();
-                }).then(function(res){
+            $.ajax({
+                url: '/home/index/isfollow',
+                type: 'post',
+                success: function(res) {
+                    console.log(res);
                     if(res) {
                         window.location.href = "/home/index/uploadproduct";
                     } else {
                         document.querySelector('.qrcode-masker').setAttribute('class', 'qrcode-masker show');
                     }
-                }).catch(function(res){
-                    alert('网络繁忙，请稍后重试');
-                });
+                }
+            });
         }
         document.querySelector('.qrcode-masker').onclick = function(e) {
             if(document.querySelector('#qrcode-img') !== e.target){
@@ -99,7 +98,6 @@
         }
     </script>
     {%if myList.totalPage > 1 %}
-    <script src="/static/js/zepto.js"></script>
     <!-- <script src="/static/js/jweixin-1.js"></script> -->
     <script src="/static/js/dropload.js"></script>
     <script>

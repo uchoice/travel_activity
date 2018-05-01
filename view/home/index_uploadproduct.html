@@ -197,37 +197,41 @@
                 }
                 param.crowds = getTagsVal('.crowd');
                 param.scenes = getTagsVal('.scene');
-                window.fetch('/home/index/addorupdateproduct',{
-                    method: 'post',
-                    headers: {
-                        'content-type': 'application/json'
-                    },
-                    credentials: 'include',
-                    body: JSON.stringify(param),
-                }).then(function(res){
-                    window.location.href = "/home/index/myproducts";
+                var formdata = new FormData();
+                formdata.append('param', JSON.stringify(param));
+                $.ajax({
+                    url: '/home/index/addorupdateproduct',
+                    type: 'post',
+                    data: formdata,
+                    processData: false,
+                    contentType: false,
+                    success: function(res) {
+                        window.location.href = "/home/index/myproducts";
+                    }
                 })
             }
             function uploadImg(formdata, $container){
                 var $imageTextBlock = $(getImageTextBlock('img'));
                 $imageTextBlock.insertBefore($container);
-                window.fetch('/home/index/uploadimg',{
-                    method: 'post',
-                    body: formdata,
-                    credentials: 'include',
-                }).then(function(res){
-                    return res.json();
-                }).then(function(res){
-                    console.log(res);
-                    $imageTextBlock.find('.uploader-cover').attr('src', res.data);
-                    $imageTextBlock.find('.image-url').val(res.data);
-                    $imageTextBlock.find('.delete-wraper').removeClass('none');
-                    $imageTextBlock.find('.uploading-icon').removeClass('uploading');
-                    $imageTextBlock.removeClass('loading');
-                    $container.find('img-input').val('');
-                }).catch(function(e){
-                    console.log(e);
-                });
+                $.ajax({
+                    url: '/home/index/uploadimg',
+                    type: 'post',
+                    data: formdata,
+                    processData: false,
+                    contentType: false,
+                    success: function(res){
+                        console.log(res);
+                        $imageTextBlock.find('.uploader-cover').attr('src', res.data);
+                        $imageTextBlock.find('.image-url').val(res.data);
+                        $imageTextBlock.find('.delete-wraper').removeClass('none');
+                        $imageTextBlock.find('.uploading-icon').removeClass('uploading');
+                        $imageTextBlock.removeClass('loading');
+                        $container.find('img-input').val('');
+                    },
+                    error: function(e){
+                        console.log(e);
+                    }
+                })
             }
             $('.content-opts').on('change', '.img-input', function(e){
                 var self = $(this);

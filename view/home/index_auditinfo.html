@@ -53,7 +53,6 @@
                       <div class="line"><span class="title">推荐人群：</span><span class="content">{{auditInfo.article.crowds.values.join(' ') + ' ' + auditInfo.article.crowds.oth}}</span></div>
                       <div class="line"><span class="title">推荐场景：</span><span class="content">{{auditInfo.article.scenes.values.join(' ') + ' ' + auditInfo.article.scenes.oth}}</span></div>
                     </div>
-                   <!--  <div class="split-line-container"><span class="split-line"></span>作品展示<span class="split-line" ></span></div> -->
                   {% for imgText in auditInfo.article.content %}
                     {% if imgText.pic != '' %}
                         <img src="{{imgText.pic}}" class="img-ele" onerror="nofind();" alt="">
@@ -68,7 +67,7 @@
                             <a href="javascript:void(0)" class="audit" data-status="1" data-id="{{auditInfo.article.id}}">通过</a>
                             <a href="javascript:void(0)" class="audit" data-status="2" data-id="{{auditInfo.article.id}}">不通过</a>
                         {% else %}
-                            {{'已通过' if auditInfo.article.status else '未通过' }}
+                            {{'通过' if auditInfo.article.status == 1 else '不通过' }}
                         {% endif %}
                     </div>
                 </div>
