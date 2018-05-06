@@ -18,10 +18,12 @@ body {
 	text-align: center;
 	height: 100%
 }
+
 .required {
-    color: #f00;
-    margin-left: 4px;
+	color: red;
+	margin-left: 4px
 }
+
 a {
 	text-decoration: none
 }
@@ -68,41 +70,59 @@ em {
 
 .content-opts {
 	display: flex;
-    justify-content: space-around;
+	justify-content: space-around;
 	width: 100%;
-	margin-top: 40px;
+	margin-top: 40px
 }
 
 .content-opts .vertical-line {
-	border-left: 1px solid #d2d2d2;
-	/* margin: 0 20px; */
+	border-left: 1px solid #d2d2d2
 }
 
 .content-opts .opt {
 	display: flex;
-    flex-direction: column;
+	flex-direction: column;
 	align-items: center;
-	position: relative;
+	position: relative
 }
 
 .content-opts .opt img {
-    width: 40px;
-    margin-bottom: 4px;
+	width: 40px;
+	margin-bottom: 4px
 }
-.number {
+
+.head-wrap {
+    position: relative;
+}
+
+.head-wrap .number {
     position: absolute;
-    top: 0;
     left: 0;
-    width: 30px;
+    bottom: 0;
+    background-color: rgba(33, 150, 243, .5);
+    padding: 3px 6px;
+    color: white;
+    font-size: 14px;
+}
+.detail-title {
+	text-align: left;
+    color: #000;
+}
+
+.rank {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 30px;
 	height: 30px;
 	text-align: center;
-    line-height: 30px;
-    margin: -13px 0 0 -13px;
-    border: 2px solid #fe9d06;
-    border-radius: 50%;
-    background: #f0dd35;
-    color: #3baebc;
-} 
+	line-height: 30px;
+	margin: -13px 0 0 -13px;
+	border: 2px solid #fe9d06;
+	border-radius: 50%;
+	background: #f0dd35;
+	color: #3baebc
+}
 
 .switch-error,.switch-success {
 	display: none
@@ -129,7 +149,7 @@ em {
 	position: relative;
 	margin-top: 2px;
 	overflow: hidden;
-	height: 300px;
+	height: 300px
 }
 
 .state-error .switch-error,.state-success .switch-success {
@@ -213,21 +233,6 @@ em {
 	background: red
 }
 
-/* .loading:before {
-	-webkit-animation: spin 2s infinite linear;
-	animation: spin 2s infinite linear;
-	background-image: url(/static/img/t018622db4e891bb87c.png);
-	background-repeat: no-repeat;
-	background-size: 774px 555px;
-	background-position: -340px -280px;
-	content: "\0020";
-	display: inline-block;
-	height: 20px;
-	margin: 0 8px 0 0;
-	vertical-align: -5px;
-	width: 20px
-} */
-
 a,li {
 	-webkit-tap-highlight-color: rgba(137,66,88,.3);
 	-webkit-touch-callout: none
@@ -237,7 +242,7 @@ a,li {
 	background: #4ac7f9 url(/static/img/title-banner.jpg) no-repeat 50% 50%;
 	background-size: auto 100%;
 	color: #FFF;
-	height: 182px
+	padding-bottom: 50%;
 }
 
 .latest-wrap {
@@ -301,7 +306,7 @@ a,li {
 }
 
 .hottest-wrap ul {
-	margin: 20px -19px 0 0;
+	margin: 20px -19px 0 0
 }
 
 .hottest-wrap li {
@@ -324,7 +329,7 @@ a,li {
 
 .popup h5 {
 	font-size: 16px;
-	color: #1fa7d1;
+	color: #1fa7d1
 }
 
 .join-form input,.join-form textarea {
@@ -344,7 +349,7 @@ a,li {
 }
 
 .bar li+li {
-	border-left: 1px solid #fff;
+	border-left: 1px solid #fff
 }
 
 .intro-wrap .inner {
@@ -748,13 +753,13 @@ a,li {
 
 .rule-title {
 	text-align: center;
-    font-size: 26px;
-	color: #fa456f;
+	font-size: 26px;
+	color: #fa456f
 }
 
 .body .content {
 	text-align: left;
-	line-height: 2;
+	line-height: 2
 }
 
 .popup-detail {
@@ -892,8 +897,8 @@ a,li {
 }
 
 .title-container .title {
-    text-align: left;
-	padding: 0px 10px 10px 0;
+	text-align: left;
+	padding: 0 10px 10px 0
 }
 
 .uploader-cover {
@@ -913,76 +918,87 @@ a,li {
 	position: absolute;
 	top: 140px;
 	left: 48%;
-	display: none;
+	display: none
 }
+
 .uploading-icon.uploading {
-	display: block;
+	display: block
 }
 
 .not-visibility {
 	visibility: hidden!important
 }
+
 .image-text-block {
 	position: relative;
 	overflow: hidden;
-	margin-top: 4px;
+	margin-top: 4px
 }
+
 .image-text-block.loading {
 	height: 300px;
-    width: 100%;
-    border: 1px solid #d2d2d2;
+	width: 100%;
+	border: 1px solid #d2d2d2
 }
+
 .image-text-block .desc {
 	width: 100%;
 	font-size: 14px;
 	box-sizing: border-box;
 	margin-top: 2px;
-	display: block;
+	display: block
 }
+
 .image-text-block .delete-txt {
-    width: 80px;
-    background-color: #fc4b7d;
-    border: none;
-    border-bottom-right-radius: 2px;
-    border-bottom-left-radius: 2px;
-    height: 30px;
-    border-radius: 4px;
-    margin-top: 4px;
+	width: 80px;
+	background-color: #fc4b7d;
+	border: none;
+	border-bottom-right-radius: 2px;
+	border-bottom-left-radius: 2px;
+	height: 30px;
+	border-radius: 4px;
+	margin-top: 4px
 }
 
 .other-info-container {
-    margin-top: 10px;
+	margin-top: 10px
 }
+
 .other-info-container .title {
-	text-align: left;
+	text-align: left
 }
+
 .other-info-container .choice-tags {
 	display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+	justify-content: space-between;
+	flex-wrap: wrap
 }
+
 .choice-tags .tag {
 	background-color: #d2d2d2;
-    padding: 8px 4px;
-    white-space: nowrap;
-    border-radius: 4px;
-    flex-basis: 20%;
-    margin-top: 10px;
+	padding: 8px 4px;
+	white-space: nowrap;
+	border-radius: 4px;
+	flex-basis: 20%;
+	margin-top: 10px
 }
+
 .choice-tags .tag.selected {
 	background-color: #1fa7d1;
-    color: #fff;
+	color: #fff
 }
+
 .other-ipt {
 	height: 30px;
-    width: 100%;
-    border: 1px solid #d2d2d2;
-    border-radius: 4px;
-    margin-bottom: 20px;
-    box-sizing: border-box;
+	width: 100%;
+	border: 1px solid #d2d2d2;
+	border-radius: 4px;
+	margin-bottom: 20px;
+	box-sizing: border-box;
 	margin-top: 10px;
-	padding-left: 10px;
+	padding-left: 10px
 }
+
 .delete-wraper {
 	display: flex;
 	position: absolute;
@@ -998,7 +1014,7 @@ a,li {
 }
 
 .none {
-	display: none !important;
+	display: none!important
 }
 
 .delete-wraper .delete-btn {
@@ -1014,7 +1030,7 @@ a,li {
 
 .wrap-rule p {
 	font-size: 14px;
-	line-height: 2;
+	line-height: 2
 }
 
 .wrap-rule a,a.link {
@@ -1056,7 +1072,7 @@ a,li {
 	display: block
 }
 
-.file-wrap .img-input, .insert-pic .img-input{
+.file-wrap .img-input,.insert-pic .img-input {
 	cursor: pointer;
 	height: 100%;
 	left: 0;
