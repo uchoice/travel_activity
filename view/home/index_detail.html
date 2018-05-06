@@ -45,10 +45,11 @@
        <div id="popup_detail">
           <div id="detailed_popup" class="popup popup-detail" >
               <div class="head" style="z-index: 0;">
-                  <h4>{{detailInfo.article.title}}</h4><a href="/home/index?openid={{openid}}" class="btn-close-wrap"><span class="s btn-close"></span></a>
+                  <h4>礼游好礼</h4><a href="/home/index?openid={{openid}}" class="btn-close-wrap"><span class="s btn-close"></span></a>
               </div>
               <div class="body white">
-                  <div class="article-info">
+                 <h3 class="detail-title">{{detailInfo.article.title}}</h3>
+                 <div class="article-info">
                       <div class="line"><span class="title">作品编号：</span><span class="content">{{detailInfo.article.id}}</span></div>
                       <div class="line"><span class="title">推荐人群：</span><span class="content">{{detailInfo.article.crowds.values.join(' ') + ' ' + detailInfo.article.crowds.oth}}</span></div>
                       <div class="line"><span class="title">推荐场景：</span><span class="content">{{detailInfo.article.scenes.values.join(' ') + ' ' + detailInfo.article.scenes.oth}}</span></div>

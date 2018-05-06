@@ -12,7 +12,7 @@
 
 <body>
     <div id="wrap_content">
-        <div class="intro-wrap">
+        <div class="intro-wrap joinActivityLink">
         </div>
         <div class="latest-wrap">
             <div class="inner">
@@ -114,12 +114,11 @@
         </div>
     </div>
     <script>
-        document.querySelector('#joinActivityLink').onclick = function() {
+        document.querySelector('.joinActivityLink').onclick = function() {
                 $.ajax({
                     url: '/home/index/isfollow',
                     type: 'post',
                     success: function(res) {
-                        console.log(res);
                         if(res) {
                             window.location.href = "/home/index/uploadproduct";
                         } else {

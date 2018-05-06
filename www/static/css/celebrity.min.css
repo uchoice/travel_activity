@@ -104,6 +104,10 @@ em {
     color: white;
     font-size: 14px;
 }
+.detail-title {
+	text-align: left;
+    color: #000;
+}
 
 .rank {
 	position: absolute;
@@ -238,7 +242,7 @@ a,li {
 	background: #4ac7f9 url(/static/img/title-banner.jpg) no-repeat 50% 50%;
 	background-size: auto 100%;
 	color: #FFF;
-	height: 182px
+	padding-bottom: 50%;
 }
 
 .latest-wrap {
