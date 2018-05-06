@@ -171,15 +171,20 @@ export default class extends Base {
   async myproductsAction() {
     const openid = await this.session('openid');
     const server = new (think.service('server'))();
-    let res = await server.getMyProducts(1, openid);
-    for(let i = 0, length1 = res.data.length; i < length1 ; i ++) {
-      res.data[i].firstImg = '/static/img/download-error.png';
-      for(let j = 0, length2 = res.data[i].content.length; j < length2; j++){
-          if(res.data[i].content[j].pic != '') {
-            res.data[i].firstImg = res.data[i].content[j].pic;
-            break;
-          }
+    let res;
+    try{
+      res = await server.getMyProducts(1, openid);
+      for(let i = 0, length1 = res.data.length; i < length1 ; i ++) {
+        res.data[i].firstImg = '/static/img/download-error.png';
+        for(let j = 0, length2 = res.data[i].content.length; j < length2; j++){
+            if(res.data[i].content[j].pic != '') {
+              res.data[i].firstImg = res.data[i].content[j].pic;
+              break;
+            }
+        }
       }
+    }catch(e){
+      res = [];
     }
     this.assign('myList', res);
     this.display();

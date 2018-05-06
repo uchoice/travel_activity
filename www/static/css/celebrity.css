@@ -258,8 +258,8 @@ a,li {
 }
 
 .bar {
-	background: #1fa7d1;
-	border-top: 2px solid #1fa7d1;
+	background: #fe1f69;
+	border-top: 2px solid #fe1f69;
 	height: 50px;
 	line-height: 50px;
 	width: 100%
@@ -329,7 +329,7 @@ a,li {
 
 .popup h5 {
 	font-size: 16px;
-	color: #1fa7d1
+	color: #fe1f69;
 }
 
 .join-form input,.join-form textarea {
@@ -446,7 +446,7 @@ a,li {
 }
 
 .popup .head {
-	background: #1fa7d1;
+	background: #fe1f69;
 	color: #FFF;
 	height: 50px;
 	line-height: 50px;
