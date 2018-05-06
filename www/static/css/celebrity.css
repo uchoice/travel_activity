@@ -92,21 +92,22 @@ em {
 }
 
 .head-wrap {
-    position: relative;
+	position: relative
 }
 
 .head-wrap .number {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    background-color: rgba(33, 150, 243, .5);
-    padding: 3px 6px;
-    color: white;
-    font-size: 14px;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	background-color: rgba(33,150,243,.5);
+	padding: 3px 6px;
+	color: #fff;
+	font-size: 14px
 }
+
 .detail-title {
 	text-align: left;
-    color: #000;
+	color: #000
 }
 
 .rank {
@@ -242,7 +243,7 @@ a,li {
 	background: #4ac7f9 url(/static/img/title-banner.jpg) no-repeat 50% 50%;
 	background-size: auto 100%;
 	color: #FFF;
-	padding-bottom: 50%;
+	padding-bottom: 50%
 }
 
 .latest-wrap {
@@ -329,7 +330,7 @@ a,li {
 
 .popup h5 {
 	font-size: 16px;
-	color: #fe1f69;
+	color: #fe1f69
 }
 
 .join-form input,.join-form textarea {
@@ -552,7 +553,7 @@ a,li {
 }
 
 .popup .btn {
-	background: #1fa7d1;
+	background: #fc4b7d;
 	border-radius: 25px;
 	border: 0 none;
 	color: #FFF;

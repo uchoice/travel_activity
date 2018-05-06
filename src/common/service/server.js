@@ -115,6 +115,7 @@ export default class extends think.service.base {
     const par = {
       url: `${wx.host}/wechart/sign?url=${url}`,
       method: 'get',
+      action: 'getWxSignInfo',
     }
     think.log(par, `url:${url}`);
     return this.send(par);
@@ -123,6 +124,7 @@ export default class extends think.service.base {
       const  par  = {
          url: `${wx.host}/user/location?openId=${openid}&longitude=${userLocationInfo.longitude}&latitude=${userLocationInfo.latitude}&accuracy=${userLocationInfo.accuracy || ''}&speed=${userLocationInfo.speed || ''}`,
          method: 'post',
+         action: 'uploadUserLocation'
       }
       think.log(par, `openid:${openid}`);
       return this.send(par);

@@ -104,7 +104,7 @@
                         <a href="/home/index/prize">奖品·规则</a>
                     </li>
                     <li>
-                        <a id="joinActivityLink" href="javascript:void(0)">参与活动</a>
+                        <a class="joinActivityLink" href="javascript:void(0)">参与活动</a>
                     </li>
                     <li>
                         <a href="/home/index/myproducts">我的作品</a>
@@ -113,8 +113,9 @@
             </div>
         </div>
     </div>
+    <script src="/static/js/zepto.js"></script>
     <script>
-        document.querySelector('.joinActivityLink').onclick = function() {
+        $('.joinActivityLink').on('click',function() {
                 $.ajax({
                     url: '/home/index/isfollow',
                     type: 'post',
@@ -126,7 +127,7 @@
                         }
                     }
                 });
-        }
+        })
         document.querySelector('.qrcode-masker').onclick = function(e) {
             if(document.querySelector('#qrcode-img') !== e.target){
                 document.querySelector('.qrcode-masker').setAttribute('class', 'qrcode-masker');
@@ -134,7 +135,6 @@
         }
     </script>
     <script src="/static/js/jweixin-1.0.0.js"></script>
-    <script src="/static/js/zepto.js"></script>
     <script>
         $.ajax({
             url: '/home/index/getsignature?url='+ encodeURIComponent(window.location.href),
